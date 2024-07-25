@@ -43,8 +43,7 @@ class _MusicPlayingViewState extends State<MusicPlayingView> {
   @override
   void initState() {
     super.initState();
-    if (widget.audioPlayer.playerState.playing &&
-        widget.audioPlayer.currentIndex == widget.currentIndex) {
+    if (widget.audioPlayer.currentIndex == widget.currentIndex) {
       currentIndex = widget.currentIndex;
       listenToSongIndex();
     } else {
@@ -231,6 +230,9 @@ class _MusicPlayingViewState extends State<MusicPlayingView> {
                           widget.audioPlayer.seek(Duration.zero,
                               index: widget.mySongModelsList.length - 1);
                         }
+                        if (!widget.audioPlayer.playing) {
+                          widget.audioPlayer.play();
+                        }
                       },
                       icon: Icon(
                         CupertinoIcons.backward_fill,
@@ -250,6 +252,9 @@ class _MusicPlayingViewState extends State<MusicPlayingView> {
                           widget.audioPlayer.seekToNext();
                         } else {
                           widget.audioPlayer.seek(Duration.zero, index: 0);
+                        }
+                        if (!widget.audioPlayer.playing) {
+                          widget.audioPlayer.play();
                         }
                       },
                       icon: Icon(

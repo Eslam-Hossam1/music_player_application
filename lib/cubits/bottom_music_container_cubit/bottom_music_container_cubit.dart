@@ -27,6 +27,9 @@ class BottomMusicContainerCubit extends Cubit<BottomMusicContainerStates> {
 
   void seekToNext() {
     this.audioPlayer!.seekToNext();
+    if (!this.audioPlayer!.playing) {
+      this.audioPlayer!.play();
+    }
   }
 
   void listToPlayingState(AudioPlayer audioPlayer) {

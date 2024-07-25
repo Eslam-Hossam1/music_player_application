@@ -46,7 +46,7 @@ class _SongsListViewState extends State<SongsListView>
                 currentIndex: currentIndex,
                 audioPlayer: BlocProvider.of<MusicCubit>(context).audioPlayer,
                 songModelList: mySongModelList);
-        // listenToSongIndex();
+        listenToSongIndex();
       },
     );
   }
