@@ -11,6 +11,7 @@ import 'package:music_player_app/cubits/favourate_songs_cubit.dart/favourate_son
 import 'package:music_player_app/cubits/music_cubit/music_cubit.dart';
 import 'package:music_player_app/cubits/playlist_cubit/playlist_cubit.dart';
 import 'package:music_player_app/helper/add_space.dart';
+import 'package:music_player_app/helper/filter_database_playlist.dart';
 import 'package:music_player_app/helper/get_last_song_played_index.dart';
 import 'package:music_player_app/models/my_playlist_model.dart';
 import 'package:music_player_app/models/my_song_model.dart';
@@ -37,9 +38,10 @@ class _PlaylistViewState extends State<PlaylistView> {
   @override
   void initState() {
     super.initState();
-
+    filterDatabaseModelList(widget.myPlaylistModel);
     playlistSongModels = fetchPlaylistSongs();
     currentIndex = getLastSongPlayedIndex(playlistSongModels);
+
     // listenToSongIndex();
   }
 
