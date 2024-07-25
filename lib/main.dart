@@ -10,6 +10,7 @@ import 'package:music_player_app/cubits/bottom_music_container_cubit/bottom_musi
 import 'package:music_player_app/cubits/favourate_songs_cubit.dart/favourate_songs_cubit.dart';
 import 'package:music_player_app/cubits/music_cubit/music_cubit.dart';
 import 'package:music_player_app/cubits/playlist_cubit/playlist_cubit.dart';
+import 'package:music_player_app/helper/check_device_crud_files.dart';
 import 'package:music_player_app/models/my_playlist_model.dart';
 import 'package:music_player_app/models/my_song_model.dart';
 
@@ -36,10 +37,13 @@ Future<void> main() async {
   await Hive.openBox<int>(kLastSongIdPlayedBox);
   await Hive.openBox<MyPlaylistModel>('myPlaylistModelBox');
   await Hive.openBox(kFlagBox);
+  await Permission.storage.request();
   if (Hive.box(kFlagBox).get(kOpenedBeforeKey) == null) {
     await Hive.box(kFlagBox).put(kOpenedBeforeKey, false);
+  } else {
+    bool needToSetUp = await checkChangeOccuredInDeviceSongsFiles();
+    await Hive.box(kFlagBox).put(kOpenedBeforeKey, !needToSetUp);
   }
-  await Permission.storage.request();
   FlutterNativeSplash.remove();
   runApp(const MusicApp());
 }

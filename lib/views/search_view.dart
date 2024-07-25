@@ -84,8 +84,10 @@ class _SearchViewState extends State<SearchView> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 12, vertical: 8),
                             child: GestureDetector(
-                              onTap: () {
+                              onTap: () async {
                                 FocusScope.of(context).unfocus();
+                                await Future.delayed(
+                                    Duration(milliseconds: 300));
                                 BlocProvider.of<FavourateSongsCubit>(context)
                                     .audioPlayer
                                     .stop();
