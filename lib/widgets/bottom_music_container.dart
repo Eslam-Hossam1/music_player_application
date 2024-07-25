@@ -74,6 +74,8 @@ class BottomMusicContainer extends StatelessWidget {
                               .id,
                           type: ArtworkType.AUDIO,
                           keepOldArtwork: true,
+                          nullArtworkWidget:
+                              Image.asset("assets/music_jpeg_4x.jpg"),
                         ),
                       ),
                     ),
@@ -91,7 +93,7 @@ class BottomMusicContainer extends StatelessWidget {
                                       .songModelList![
                                           bottomMusicCubit.currentIndex!]
                                       .artist ==
-                                  "unknown"
+                                  "<unknown>"
                               ? bottomMusicCubit
                                   .songModelList![
                                       bottomMusicCubit.currentIndex!]

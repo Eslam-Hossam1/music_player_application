@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
@@ -6,6 +8,7 @@ import 'package:music_player_app/cubits/favourate_songs_cubit.dart/favourate_son
 import 'package:music_player_app/cubits/favourate_songs_cubit.dart/favourate_songs_states.dart';
 import 'package:music_player_app/cubits/music_cubit/music_cubit.dart';
 import 'package:music_player_app/cubits/playlist_cubit/playlist_cubit.dart';
+import 'package:music_player_app/helper/get_last_song_played_index.dart';
 import 'package:music_player_app/models/my_song_model.dart';
 import 'package:music_player_app/views/favourate_music_playing_view.dart';
 import 'package:music_player_app/views/music_playing_view.dart';
@@ -24,12 +27,13 @@ class _FavourateSongsListViewState extends State<FavourateSongsListView>
   bool get wantKeepAlive => true;
   dynamic filteredSongsList;
   late List<MySongModel> mySongModelList;
-  int currentIndex = -1;
+  late int currentIndex;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     mySongModelList = fetchSongs();
+    currentIndex = getLastSongPlayedIndex(mySongModelList);
   }
 
   // Future<void> sourceInitailize(List<SongModel> songModelList) async {
@@ -78,7 +82,21 @@ class _FavourateSongsListViewState extends State<FavourateSongsListView>
     super.build(context);
     return BlocBuilder<FavourateSongsCubit, FavourateSongsStates>(
         builder: (context, state) {
-      mySongModelList = fetchSongs();
+      if (state is FavourateSongsPlayListChangeCurrentIndex) {
+        try {
+          if (state.cubitCurrentIndex < mySongModelList.length) {
+            currentIndex = state.cubitCurrentIndex;
+
+            Hive.box<int>(kLastSongIdPlayedBox)
+                .put(kLastSongIdPlayedKey, mySongModelList[currentIndex].id);
+          }
+        } on Exception catch (e) {
+          log(e.toString());
+        }
+      } else {
+        mySongModelList = fetchSongs();
+      }
+
       return mySongModelList.isEmpty
           ? Center(
               child: Text("There is no favourate song,Add one"),
@@ -104,13 +122,10 @@ class _FavourateSongsListViewState extends State<FavourateSongsListView>
                       },
                     ));
                     BlocProvider.of<FavourateSongsCubit>(context)
-                        .audioPlayer
-                        .currentIndexStream
-                        .listen(
-                      (event) {
-                        currentIndex = event ?? 0;
-                      },
-                    );
+                        .listenToSongIndex(
+                            audioplayer:
+                                BlocProvider.of<FavourateSongsCubit>(context)
+                                    .audioPlayer);
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(

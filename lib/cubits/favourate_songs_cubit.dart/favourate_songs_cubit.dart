@@ -13,6 +13,15 @@ class FavourateSongsCubit extends Cubit<FavourateSongsStates> {
     emit(ChangeOccuredState());
   }
 
+  void listenToSongIndex({required AudioPlayer audioplayer}) {
+    audioplayer.currentIndexStream.listen(
+      (event) {
+        emit(FavourateSongsPlayListChangeCurrentIndex(
+            cubitCurrentIndex: event ?? 0));
+      },
+    );
+  }
+
   void removeFromFavourates({required MySongModel mySongModel}) {
     mySongModel.isFavourate = false;
     mySongModel.save();
