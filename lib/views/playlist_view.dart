@@ -18,6 +18,7 @@ import 'package:music_player_app/views/add_songs_to_playlist_view.dart';
 import 'package:music_player_app/views/delete_songs_from_playlist_view.dart';
 import 'package:music_player_app/views/music_playing_view.dart';
 import 'package:music_player_app/views/playlist_music_playing_view.dart';
+import 'package:music_player_app/widgets/bottom_music_container.dart';
 import 'package:music_player_app/widgets/custome_elevated_button_Icon.dart';
 import 'package:music_player_app/widgets/song_item.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -86,91 +87,95 @@ class _PlaylistViewState extends State<PlaylistView> {
       child: SafeArea(
         child: Scaffold(
             backgroundColor: Colors.transparent,
-            body: CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: SizedBox(
-                      height: 50,
+            body: Stack(
+              children: [
+                CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 12),
-                        child: Row(
-                          children: [
-                            IconButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                icon: const Icon(CupertinoIcons.back)),
-                            const Spacer(),
-                            PopupMenuButton(
-                              itemBuilder: (context) {
-                                return [
-                                  PopupMenuItem(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Text("Add Songs"),
-                                        Icon(Icons.add_box_outlined)
-                                      ],
-                                    ),
-                                    onTap: () {
-                                      Navigator.push(context, MaterialPageRoute(
-                                        builder: (context) {
-                                          return AddSongsToPlaylistView(
-                                            myPlaylistModel:
-                                                widget.myPlaylistModel,
-                                          );
-                                        },
-                                      ));
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: SizedBox(
+                          height: 50,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
+                            child: Row(
+                              children: [
+                                IconButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
                                     },
-                                  ),
-                                  PopupMenuItem(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Text("Delete Songs"),
-                                          Icon(CupertinoIcons.delete_simple)
-                                        ],
-                                      ),
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
+                                    icon: const Icon(CupertinoIcons.back)),
+                                const Spacer(),
+                                PopupMenuButton(
+                                  itemBuilder: (context) {
+                                    return [
+                                      PopupMenuItem(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Text("Add Songs"),
+                                            Icon(Icons.add_box_outlined)
+                                          ],
+                                        ),
+                                        onTap: () {
+                                          Navigator.push(context,
+                                              MaterialPageRoute(
                                             builder: (context) {
-                                              return DeleteSongsFromPlaylistView(
+                                              return AddSongsToPlaylistView(
                                                 myPlaylistModel:
                                                     widget.myPlaylistModel,
                                               );
                                             },
+                                          ));
+                                        },
+                                      ),
+                                      PopupMenuItem(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Text("Delete Songs"),
+                                              Icon(CupertinoIcons.delete_simple)
+                                            ],
                                           ),
-                                        );
-                                      })
-                                ];
-                              },
-                            )
-                          ],
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) {
+                                                  return DeleteSongsFromPlaylistView(
+                                                    myPlaylistModel:
+                                                        widget.myPlaylistModel,
+                                                  );
+                                                },
+                                              ),
+                                            );
+                                          })
+                                    ];
+                                  },
+                                )
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                SliverToBoxAdapter(child: addHieghtSpace(16)),
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 230,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.width * .2),
-                      child: Hero(
-                        tag: "lol2",
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child:
-                              widget.myPlaylistModel.mysongModelsIdList.isEmpty
+                    SliverToBoxAdapter(child: addHieghtSpace(16)),
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 230,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  MediaQuery.of(context).size.width * .2),
+                          child: Hero(
+                            tag: "lol2",
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: widget.myPlaylistModel.mysongModelsIdList
+                                      .isEmpty
                                   ? Image.asset(
                                       "assets/music_jpeg_4x.jpg",
                                       fit: BoxFit.cover,
@@ -187,173 +192,181 @@ class _PlaylistViewState extends State<PlaylistView> {
                                         fit: BoxFit.cover,
                                       ),
                                     ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                SliverToBoxAdapter(child: addHieghtSpace(16)),
-                SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-                      Text(
-                        overflow: TextOverflow.ellipsis,
-                        widget.myPlaylistModel.name,
-                        style: const TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      addHieghtSpace(32),
-                      IgnorePointer(
-                        ignoring:
-                            widget.myPlaylistModel.mysongModelsIdList.isEmpty,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            CustomeElvatedButtonIcon(
-                              onPresed: () {
-                                BlocProvider.of<MusicCubit>(context)
-                                    .audioPlayer
-                                    .stop();
+                    SliverToBoxAdapter(child: addHieghtSpace(16)),
+                    SliverToBoxAdapter(
+                      child: Column(
+                        children: [
+                          Text(
+                            overflow: TextOverflow.ellipsis,
+                            widget.myPlaylistModel.name,
+                            style: const TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          addHieghtSpace(32),
+                          IgnorePointer(
+                            ignoring: widget
+                                .myPlaylistModel.mysongModelsIdList.isEmpty,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                CustomeElvatedButtonIcon(
+                                  onPresed: () {
+                                    BlocProvider.of<MusicCubit>(context)
+                                        .audioPlayer
+                                        .stop();
 
-                                BlocProvider.of<PlaylistCubit>(context)
-                                    .audioPlayer
-                                  ..stop()
-                                  ..setShuffleModeEnabled(false);
+                                    BlocProvider.of<PlaylistCubit>(context)
+                                        .audioPlayer
+                                      ..stop()
+                                      ..setShuffleModeEnabled(false);
 
-                                Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) {
-                                    return MusicPlayingView(
-                                        audioPlayer:
-                                            BlocProvider.of<PlaylistCubit>(
-                                                    context)
-                                                .audioPlayer,
-                                        mySongModelsList: playlistSongModels,
-                                        currentIndex: 0);
+                                    Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) {
+                                        return MusicPlayingView(
+                                            audioPlayer:
+                                                BlocProvider.of<PlaylistCubit>(
+                                                        context)
+                                                    .audioPlayer,
+                                            mySongModelsList:
+                                                playlistSongModels,
+                                            currentIndex: 0);
+                                      },
+                                    ));
                                   },
-                                ));
-                              },
-                              backgroundColor: Colors.white,
-                              internalColor: const Color(0xff30314d),
-                              text: "Play All",
-                              iconData: Icons.play_arrow_rounded,
-                            ),
-                            CustomeElvatedButtonIcon(
-                              backgroundColor: Color(0xff30314d),
-                              internalColor: Colors.white,
-                              text: "Shuffle",
-                              iconData: Icons.shuffle,
-                              onPresed: () {
-                                BlocProvider.of<MusicCubit>(context)
-                                    .audioPlayer
-                                    .stop();
+                                  backgroundColor: Colors.white,
+                                  internalColor: const Color(0xff30314d),
+                                  text: "Play All",
+                                  iconData: Icons.play_arrow_rounded,
+                                ),
+                                CustomeElvatedButtonIcon(
+                                  backgroundColor: Color(0xff30314d),
+                                  internalColor: Colors.white,
+                                  text: "Shuffle",
+                                  iconData: Icons.shuffle,
+                                  onPresed: () {
+                                    BlocProvider.of<MusicCubit>(context)
+                                        .audioPlayer
+                                        .stop();
 
-                                BlocProvider.of<PlaylistCubit>(context)
-                                    .audioPlayer
-                                  ..stop()
-                                  ..setShuffleModeEnabled(true);
+                                    BlocProvider.of<PlaylistCubit>(context)
+                                        .audioPlayer
+                                      ..stop()
+                                      ..setShuffleModeEnabled(true);
 
-                                Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) {
-                                    return PlaylistMusicPlayingView(
-                                        audioPlayer:
-                                            BlocProvider.of<PlaylistCubit>(
-                                                    context)
-                                                .audioPlayer,
-                                        mySongModelsList: playlistSongModels,
-                                        currentIndex: 0);
+                                    Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) {
+                                        return PlaylistMusicPlayingView(
+                                            audioPlayer:
+                                                BlocProvider.of<PlaylistCubit>(
+                                                        context)
+                                                    .audioPlayer,
+                                            mySongModelsList:
+                                                playlistSongModels,
+                                            currentIndex: 0);
+                                      },
+                                    ));
                                   },
-                                ));
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      addHieghtSpace(12),
-                    ],
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: Divider(
-                    endIndent: 12,
-                    indent: 12,
-                    color: Colors.white.withOpacity(.7),
-                    thickness: 1,
-                  ),
-                ),
-                BlocBuilder<AddAndDeletePlaylistSongsCubit,
-                    AddAndDeletePlaylistSongsState>(builder: (context, state) {
-                  if (state is AddAndDeletePlaylistSongsRefreshState) {
-                    try {
-                      if (state.cubitCurrentIndex < playlistSongModels.length) {
-                        currentIndex = state.cubitCurrentIndex;
-
-                        Hive.box<int>(kLastSongIdPlayedBox).put(
-                            kLastSongIdPlayedKey,
-                            playlistSongModels[currentIndex].id);
-                      }
-                    } on Exception catch (e) {
-                      log(e.toString());
-                    }
-                  } else {
-                    playlistSongModels = fetchPlaylistSongs();
-                  }
-
-                  return playlistSongModels.isEmpty
-                      ? SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                top: MediaQuery.of(context).size.height * .17),
-                            child: Center(
-                              child: Text("There is no Songs Add one"),
+                                ),
+                              ],
                             ),
                           ),
-                        )
-                      : SliverList.builder(
-                          itemCount: playlistSongModels.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 14.0, right: 14, bottom: 8, top: 2),
-                              child: GestureDetector(
-                                onTap: () {
-                                  BlocProvider.of<MusicCubit>(context)
-                                      .audioPlayer
-                                      .stop();
-                                  BlocProvider.of<FavourateSongsCubit>(context)
-                                      .audioPlayer
-                                      .stop();
-                                  Navigator.push(context, MaterialPageRoute(
-                                    builder: (context) {
-                                      return MusicPlayingView(
-                                          currentIndex: index,
-                                          audioPlayer:
-                                              BlocProvider.of<PlaylistCubit>(
-                                                      context)
-                                                  .audioPlayer,
-                                          mySongModelsList: playlistSongModels);
-                                    },
-                                  ));
-                                  BlocProvider.of<
-                                              AddAndDeletePlaylistSongsCubit>(
-                                          context)
-                                      .listenToSongIndex(
-                                          audioplayer:
-                                              BlocProvider.of<PlaylistCubit>(
-                                                      context)
-                                                  .audioPlayer);
-                                },
-                                child: SongItem(
-                                  isActive: currentIndex == index,
-                                  songModel:
-                                      playlistSongModels[index].toSongModel(),
+                          addHieghtSpace(12),
+                        ],
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Divider(
+                        endIndent: 12,
+                        indent: 12,
+                        color: Colors.white.withOpacity(.7),
+                        thickness: 1,
+                      ),
+                    ),
+                    BlocBuilder<AddAndDeletePlaylistSongsCubit,
+                            AddAndDeletePlaylistSongsState>(
+                        builder: (context, state) {
+                      if (state is AddAndDeletePlaylistSongsRefreshState) {
+                        try {
+                          if (state.cubitCurrentIndex <
+                              playlistSongModels.length) {
+                            currentIndex = state.cubitCurrentIndex;
+
+                            Hive.box<int>(kLastSongIdPlayedBox).put(
+                                kLastSongIdPlayedKey,
+                                playlistSongModels[currentIndex].id);
+                          }
+                        } on Exception catch (e) {
+                          log(e.toString());
+                        }
+                      } else {
+                        playlistSongModels = fetchPlaylistSongs();
+                      }
+
+                      return playlistSongModels.isEmpty
+                          ? SliverToBoxAdapter(
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                    top: MediaQuery.of(context).size.height *
+                                        .17),
+                                child: Center(
+                                  child: Text("There is no Songs Add one"),
                                 ),
                               ),
+                            )
+                          : SliverList.builder(
+                              itemCount: playlistSongModels.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 14.0, right: 14, bottom: 8, top: 2),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      BlocProvider.of<MusicCubit>(context)
+                                          .audioPlayer
+                                          .stop();
+                                      BlocProvider.of<FavourateSongsCubit>(
+                                              context)
+                                          .audioPlayer
+                                          .stop();
+                                      Navigator.push(context, MaterialPageRoute(
+                                        builder: (context) {
+                                          return MusicPlayingView(
+                                              currentIndex: index,
+                                              audioPlayer: BlocProvider.of<
+                                                      PlaylistCubit>(context)
+                                                  .audioPlayer,
+                                              mySongModelsList:
+                                                  playlistSongModels);
+                                        },
+                                      ));
+                                      BlocProvider.of<
+                                                  AddAndDeletePlaylistSongsCubit>(
+                                              context)
+                                          .listenToSongIndex(
+                                              audioplayer: BlocProvider.of<
+                                                      PlaylistCubit>(context)
+                                                  .audioPlayer);
+                                    },
+                                    child: SongItem(
+                                      isActive: currentIndex == index,
+                                      songModel: playlistSongModels[index]
+                                          .toSongModel(),
+                                    ),
+                                  ),
+                                );
+                              },
                             );
-                          },
-                        );
-                }),
+                    }),
+                  ],
+                ),
+                Positioned(bottom: 0, child: BottomMusicContainer())
               ],
             )),
       ),
