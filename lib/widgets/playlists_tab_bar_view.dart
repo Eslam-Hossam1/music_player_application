@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:music_player_app/constants.dart';
+import 'package:music_player_app/cubits/music_cubit/music_cubit.dart';
 import 'package:music_player_app/cubits/playlist_cubit/playlist_cubit.dart';
 import 'package:music_player_app/cubits/playlist_cubit/playlist_state.dart';
 import 'package:music_player_app/helper/add_space.dart';
 import 'package:music_player_app/models/my_playlist_model.dart';
+import 'package:music_player_app/models/my_song_model.dart';
 import 'package:music_player_app/views/delete_playlists_view.dart';
 import 'package:music_player_app/views/playlist_view.dart';
 import 'package:music_player_app/widgets/add_playlist_dialog.dart';
@@ -34,6 +36,17 @@ class _PlaylistsTabBarViewState extends State<PlaylistsTabBarView>
   void initState() {
     super.initState();
     BlocProvider.of<PlaylistCubit>(context).fetchPlayLists();
+  }
+
+  MySongModel? getMysongModelFromId(int id) {
+    List<MySongModel> songModelList =
+        BlocProvider.of<MusicCubit>(context).myPublicSongModelList;
+    for (var song in songModelList) {
+      if (song.id == id) {
+        return song;
+      }
+    }
+    return null;
   }
 
   @override
@@ -129,10 +142,20 @@ class _PlaylistsTabBarViewState extends State<PlaylistsTabBarView>
                             );
                           },
                           onTap: () {
+                            MySongModel? songModel;
+                            if (playlistModelsList[index]
+                                .mysongModelsIdList
+                                .isNotEmpty) {
+                              songModel = getMysongModelFromId(
+                                  playlistModelsList[index]
+                                      .mysongModelsIdList[0]);
+                            }
                             Navigator.push(context, MaterialPageRoute(
                               builder: (context) {
                                 return PlaylistView(
-                                    myPlaylistModel: playlistModelsList[index]);
+                                  myPlaylistModel: playlistModelsList[index],
+                                  songModel: songModel,
+                                );
                               },
                             ));
                           },

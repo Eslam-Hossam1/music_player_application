@@ -31,12 +31,8 @@ class FavourateMusicPlayingView extends StatefulWidget {
 }
 
 class _FavourateMusicPlayingViewState extends State<FavourateMusicPlayingView> {
-  // PaletteColor paletteColorList = PaletteColor(Colors.green, 2);
-  //bool isPlaying = false;
-  // final List<AudioSource> songsSourcesList = [];
   late int currentIndex;
 
-  // ImageProvider? artworkImageProvider;
   bool firstBuild = true;
   @override
   void initState() {
@@ -47,19 +43,14 @@ class _FavourateMusicPlayingViewState extends State<FavourateMusicPlayingView> {
       listenToSongIndex();
     } else {
       currentIndex = widget.currentIndex;
-      // setAudioSource().then((_) {
-      //   widget.audioPlayer.play();
-      //   listenToSongIndex();
-      // });
+
       BlocProvider.of<FavourateSongsCubit>(context)
           .setupAudioPlayer(widget.mySongModelsList)
           .then(
         (value) async {
           seekToCurrenIndex(currentIndex);
           widget.audioPlayer.play();
-          // widget.audioPlayer.setShuffleModeEnabled(true);
-          // log("shuffel mode " +
-          //     widget.audioPlayer.shuffleModeEnabled.toString());
+
           listenToSongIndex();
           BlocProvider.of<BottomMusicContainerCubit>(context)
               .inializeBottomMusicContainer(
@@ -67,68 +58,29 @@ class _FavourateMusicPlayingViewState extends State<FavourateMusicPlayingView> {
                   audioPlayer:
                       BlocProvider.of<FavourateSongsCubit>(context).audioPlayer,
                   songModelList: widget.mySongModelsList);
-          // listenToPlayingState();
-          //  isPlaying = true;
         },
       );
     }
   }
 
-  // Future<void> updatePaletteGenerator() async {
-  //   try {
-  //     Uint8List? artworkBytes = await OnAudioQuery().queryArtwork(
-  //         widget.songModelsList[currentIndex].id, ArtworkType.AUDIO);
-
-  //     if (artworkBytes != null) {
-  //       artworkImageProvider = MemoryImage(artworkBytes);
-  //     } else {
-  //       artworkImageProvider = AssetImage('assets/default_artwork.png');
-  //     }
-
-  //     PaletteGenerator pg = await PaletteGenerator.fromImageProvider(
-  //       artworkImageProvider!,
-  //     );
-
-  //     setState(() {
-  //       paletteColorList = pg.darkVibrantColor ?? PaletteColor(Colors.grey, 2);
-  //     });
-  //   } catch (e) {
-  //     log(e.toString());
-  //     setState(() {
-  //       artworkImageProvider = AssetImage('assets/default_artwork.png');
-  //     });
-  //   }
-  // }
-
   Future<void> seekToCurrenIndex(int index) async {
     await widget.audioPlayer.seek(Duration.zero, index: index);
   }
 
-  //play and pause button
   void listenToPlayingState() {
     widget.audioPlayer.playerStateStream.listen((state) {
       if (state.playing) {
         if (mounted) {
-          setState(() {
-            //    isPlaying = true;
-          });
+          setState(() {});
         }
       } else {
         if (mounted) {
-          setState(() {
-            //   isPlaying = false;
-          });
+          setState(() {});
         }
       }
-      // if (state.processingState == ProcessingState.completed) {
-      //   setState(() {
-      //     isPlaying = false;
-      //   });
-      // }
     });
   }
 
-  //entire view
   void listenToSongIndex() {
     widget.audioPlayer.currentIndexStream.listen((event) {
       if (event != null && mounted) {
@@ -140,40 +92,9 @@ class _FavourateMusicPlayingViewState extends State<FavourateMusicPlayingView> {
             currentIndex = event;
           });
         }
-        // await updatePaletteGenerator();
       }
     });
   }
-
-  // Future<void> setAudioSource() async {
-  //   for (var element in widget.songModelsList) {
-  //     final artwork =
-  //         await OnAudioQuery().queryArtwork(element.id, ArtworkType.AUDIO);
-  //     String? artworkUri;
-
-  //     if (artwork != null) {
-  //       final tempDir = await getTemporaryDirectory();
-  //       final file = await File('${tempDir.path}/${element.id}.png')
-  //           .writeAsBytes(artwork);
-  //       artworkUri = file.uri.toString();
-  //     }
-
-  //     songsSourcesList.add(AudioSource.uri(
-  //       Uri.parse(element.uri!),
-  //       tag: MediaItem(
-  //         id: element.id.toString(),
-  //         album: element.album,
-  //         title: element.title,
-  //         artUri: artworkUri != null ? Uri.parse(artworkUri) : null,
-  //       ),
-  //     ));
-  //   }
-  //   await widget.audioPlayer.setAudioSource(
-  //     ConcatenatingAudioSource(children: songsSourcesList),
-  //     initialIndex: currentIndex,
-  //   );
-  //   log("Audio source set");
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -202,18 +123,22 @@ class _FavourateMusicPlayingViewState extends State<FavourateMusicPlayingView> {
                     )),
               ),
             ),
-            MusicPlayingViewArtWork(
-              songModel: widget.mySongModelsList[currentIndex].toSongModel(),
+            Hero(
+              tag: "lol",
+              child: MusicPlayingViewArtWork(
+                mySongModel: widget.mySongModelsList[currentIndex],
+              ),
             ),
-            const Spacer(),
+            addHieghtSpace(MediaQuery.of(context).size.height * .1),
             Column(
               children: [
-                addHieghtSpace(12),
-                MusicPlayingViewListTile(
-                  mySongModel: widget.mySongModelsList[currentIndex],
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * .15,
+                  child: MusicPlayingViewListTile(
+                    mySongModel: widget.mySongModelsList[currentIndex],
+                  ),
                 ),
                 CustomeSlider(audioPlayer: widget.audioPlayer),
-                addHieghtSpace(24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -224,6 +149,9 @@ class _FavourateMusicPlayingViewState extends State<FavourateMusicPlayingView> {
                         } else {
                           widget.audioPlayer.seek(Duration.zero,
                               index: widget.mySongModelsList.length - 1);
+                        }
+                        if (!widget.audioPlayer.playing) {
+                          widget.audioPlayer.play();
                         }
                       },
                       icon: Icon(
@@ -245,6 +173,9 @@ class _FavourateMusicPlayingViewState extends State<FavourateMusicPlayingView> {
                         } else {
                           widget.audioPlayer.seek(Duration.zero, index: 0);
                         }
+                        if (!widget.audioPlayer.playing) {
+                          widget.audioPlayer.play();
+                        }
                       },
                       icon: Icon(
                         CupertinoIcons.forward_fill,
@@ -257,18 +188,19 @@ class _FavourateMusicPlayingViewState extends State<FavourateMusicPlayingView> {
                 ),
               ],
             ),
-            Expanded(
+            SizedBox(
+                height: MediaQuery.of(context).size.height * .05,
                 child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                DetailsButton(
-                  mySongModel: widget.mySongModelsList[currentIndex],
-                ),
-                ShuffleButton(
-                  audioPlayer: widget.audioPlayer,
-                )
-              ],
-            ))
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    DetailsButton(
+                      mySongModel: widget.mySongModelsList[currentIndex],
+                    ),
+                    ShuffleButton(
+                      audioPlayer: widget.audioPlayer,
+                    )
+                  ],
+                ))
           ],
         ),
       ),

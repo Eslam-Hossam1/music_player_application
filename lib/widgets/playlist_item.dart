@@ -1,14 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player_app/constants.dart';
+import 'package:music_player_app/cubits/music_cubit/music_cubit.dart';
 import 'package:music_player_app/models/my_playlist_model.dart';
+import 'package:music_player_app/models/my_song_model.dart';
 import 'package:music_player_app/views/playlist_view.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
-class PlaylistItem extends StatelessWidget {
+class PlaylistItem extends StatefulWidget {
   const PlaylistItem({
     super.key,
     required this.myPlaylistModel,
   });
   final MyPlaylistModel myPlaylistModel;
+
+  @override
+  State<PlaylistItem> createState() => _PlaylistItemState();
+}
+
+class _PlaylistItemState extends State<PlaylistItem> {
+  MySongModel? mySongModel;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.myPlaylistModel.mysongModelsIdList.isNotEmpty) {
+      mySongModel =
+          getMysongModelFromId(widget.myPlaylistModel.mysongModelsIdList[0]);
+    }
+  }
+
+  MySongModel? getMysongModelFromId(int id) {
+    List<MySongModel> songModelList =
+        BlocProvider.of<MusicCubit>(context).myPublicSongModelList;
+    for (var song in songModelList) {
+      if (song.id == id) {
+        return song;
+      }
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,7 +60,7 @@ class PlaylistItem extends StatelessWidget {
         contentPadding: const EdgeInsets.all(8),
         title: Text(
           overflow: TextOverflow.ellipsis,
-          myPlaylistModel.name,
+          widget.myPlaylistModel.name,
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         leading: SizedBox(
@@ -40,23 +72,21 @@ class PlaylistItem extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 child: Builder(
                   builder: (context) {
-                    if (myPlaylistModel.mysongModelsIdList.isEmpty) {
+                    if (widget.myPlaylistModel.mysongModelsIdList.isEmpty) {
                       return Image.asset(
                         "assets/music_jpeg_4x.jpg",
                         fit: BoxFit.cover,
                       );
                     } else {
-                      return QueryArtworkWidget(
-                        id: myPlaylistModel.mysongModelsIdList[0],
-                        type: ArtworkType.AUDIO,
-                        artworkFit: BoxFit.cover,
-                        artworkBorder: BorderRadius.circular(0),
-                        nullArtworkWidget: Image.asset(
-                          "assets/music_jpeg_4x.jpg",
-                          fit: BoxFit.cover,
-                        ),
-                        keepOldArtwork: true,
-                      );
+                      return mySongModel!.artworkString == null
+                          ? Image.asset(
+                              kApplicationIMage,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.memory(
+                              mySongModel!.artworkString!,
+                              fit: BoxFit.cover,
+                            );
                     }
                   },
                 )),
@@ -64,7 +94,7 @@ class PlaylistItem extends StatelessWidget {
         ),
         subtitle: Text(
           overflow: TextOverflow.ellipsis,
-          "Songs : ${myPlaylistModel.mysongModelsIdList.length.toString()}",
+          "Songs : ${widget.myPlaylistModel.mysongModelsIdList.length.toString()}",
           style: const TextStyle(fontSize: 14),
         ),
       ),

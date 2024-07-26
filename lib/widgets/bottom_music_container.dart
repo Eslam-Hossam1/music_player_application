@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player_app/constants.dart';
 import 'package:music_player_app/cubits/bottom_music_container_cubit/bottom_music_container_cubit.dart';
 import 'package:music_player_app/cubits/bottom_music_container_cubit/bottom_music_container_states.dart';
 import 'package:music_player_app/cubits/music_cubit/music_cubit.dart';
@@ -66,17 +67,33 @@ class BottomMusicContainer extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                       child: Hero(
                         tag: "lol",
-                        child: QueryArtworkWidget(
-                          artworkBorder: BorderRadius.zero,
-                          artworkFit: BoxFit.cover,
-                          id: bottomMusicCubit
-                              .songModelList![bottomMusicCubit.currentIndex!]
-                              .id,
-                          type: ArtworkType.AUDIO,
-                          keepOldArtwork: true,
-                          nullArtworkWidget:
-                              Image.asset("assets/music_jpeg_4x.jpg"),
-                        ),
+                        child: bottomMusicCubit
+                                    .songModelList![
+                                        bottomMusicCubit.currentIndex!]
+                                    .artworkString ==
+                                null
+                            ? Image.asset(
+                                kApplicationIMage,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.memory(
+                                bottomMusicCubit
+                                    .songModelList![
+                                        bottomMusicCubit.currentIndex!]
+                                    .artworkString!,
+                                fit: BoxFit.cover,
+                              ),
+                        // child: QueryArtworkWidget(
+                        //   artworkBorder: BorderRadius.zero,
+                        //   artworkFit: BoxFit.cover,
+                        //   id: bottomMusicCubit
+                        //       .songModelList![bottomMusicCubit.currentIndex!]
+                        //       .id,
+                        //   type: ArtworkType.AUDIO,
+                        //   keepOldArtwork: true,
+                        //   nullArtworkWidget:
+                        //       Image.asset("assets/music_jpeg_4x.jpg"),
+                        // ),
                       ),
                     ),
                   ),

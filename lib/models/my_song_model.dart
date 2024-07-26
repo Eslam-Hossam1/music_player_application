@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -43,6 +45,9 @@ class MySongModel extends HiveObject {
   @HiveField(11)
   final PaletteColorHive secondaryPaletteColor;
 
+  @HiveField(12)
+  final Uint8List? artworkString;
+
   MySongModel({
     required this.id,
     required this.data,
@@ -56,10 +61,15 @@ class MySongModel extends HiveObject {
     this.isFavourate = false,
     required this.primaryPaletteColor,
     required this.secondaryPaletteColor,
+    this.artworkString,
   });
 
-  factory MySongModel.fromSongModel(SongModel songModel, String? artworkUri,
-      PaletteColor primaryPaletteColor, PaletteColor secondaryPaletteColor) {
+  factory MySongModel.fromSongModel(
+      SongModel songModel,
+      String? artworkUri,
+      PaletteColor primaryPaletteColor,
+      PaletteColor secondaryPaletteColor,
+      Uint8List? artwork) {
     return MySongModel(
       id: songModel.id,
       data: songModel.data,
@@ -71,6 +81,7 @@ class MySongModel extends HiveObject {
       dateAdded: songModel.dateAdded ?? 1000000000,
       isFavourate: false,
       artworkUri: artworkUri,
+      artworkString: artwork,
       primaryPaletteColor:
           PaletteColorHive.fromPaletteColor(primaryPaletteColor),
       secondaryPaletteColor:

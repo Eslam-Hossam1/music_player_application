@@ -112,6 +112,7 @@ class _SearchViewState extends State<SearchView> {
                                 ));
                               },
                               child: SongItem(
+                                  mySongModel: songModelsList[index],
                                   songModel:
                                       songModelsList[index].toSongModel(),
                                   isActive: false),

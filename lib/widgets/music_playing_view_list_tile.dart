@@ -15,30 +15,36 @@ class MusicPlayingViewListTile extends StatelessWidget {
   final MySongModel mySongModel;
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      title: Text(
-        mySongModel.title,
-        overflow: TextOverflow.ellipsis,
-        maxLines: 2,
-        style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: Color(mySongModel.secondaryPaletteColor.colorValue),
+    return Row(
+      children: [
+        Expanded(
+          child: ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(
+              mySongModel.title,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            subtitle: Text(
+              mySongModel.artist == "<unknown>"
+                  ? mySongModel.title
+                  : mySongModel.artist!,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white.withOpacity(.5),
+              ),
+            ),
+          ),
         ),
-      ),
-      subtitle: Text(
-        mySongModel.artist == "<unknown>"
-            ? mySongModel.title
-            : mySongModel.artist!,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: Colors.white.withOpacity(.5),
-        ),
-      ),
-      trailing: CustomeFavouriteButton(mySongModel: mySongModel),
+        CustomeFavouriteButton(mySongModel: mySongModel),
+      ],
     );
   }
 }

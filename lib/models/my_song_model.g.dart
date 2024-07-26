@@ -29,13 +29,14 @@ class MySongModelAdapter extends TypeAdapter<MySongModel> {
       isFavourate: fields[8] as bool,
       primaryPaletteColor: fields[10] as PaletteColorHive,
       secondaryPaletteColor: fields[11] as PaletteColorHive,
+      artworkString: fields[12] as Uint8List?,
     );
   }
 
   @override
   void write(BinaryWriter writer, MySongModel obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -59,7 +60,9 @@ class MySongModelAdapter extends TypeAdapter<MySongModel> {
       ..writeByte(10)
       ..write(obj.primaryPaletteColor)
       ..writeByte(11)
-      ..write(obj.secondaryPaletteColor);
+      ..write(obj.secondaryPaletteColor)
+      ..writeByte(12)
+      ..write(obj.artworkString);
   }
 
   @override

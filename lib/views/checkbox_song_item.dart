@@ -5,9 +5,13 @@ import 'package:on_audio_query/on_audio_query.dart';
 
 class CheckboxSongItem extends StatelessWidget {
   const CheckboxSongItem(
-      {super.key, required this.songModel, required this.isChecked});
+      {super.key,
+      required this.songModel,
+      required this.isChecked,
+      required this.mySongModel});
   final SongModel songModel;
   final bool isChecked;
+  final MySongModel mySongModel;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +19,8 @@ class CheckboxSongItem extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       child: Stack(
         children: [
-          SongItem(songModel: songModel, isActive: false),
+          SongItem(
+              mySongModel: mySongModel, songModel: songModel, isActive: false),
           Positioned(
             right: 0,
             child: Icon(isChecked

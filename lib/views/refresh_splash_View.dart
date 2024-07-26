@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:music_player_app/constants.dart';
 import 'package:music_player_app/cubits/music_cubit/music_cubit.dart';
+import 'package:music_player_app/helper/add_space.dart';
 import 'package:music_player_app/views/home_view.dart';
 
-class SplashView extends StatefulWidget {
-  const SplashView({super.key});
+class RefreshSplashView extends StatefulWidget {
+  const RefreshSplashView({super.key});
 
   @override
-  State<SplashView> createState() => _SplashViewState();
+  State<RefreshSplashView> createState() => _RefreshSplashViewState();
 }
 
-class _SplashViewState extends State<SplashView> {
+class _RefreshSplashViewState extends State<RefreshSplashView> {
   @override
   void initState() {
     super.initState();
@@ -20,10 +21,7 @@ class _SplashViewState extends State<SplashView> {
   }
 
   void _initializeData() async {
-    Future.wait([
-      BlocProvider.of<MusicCubit>(context).setupSongModels(),
-      Future.delayed(Duration(seconds: 2))
-    ]).then(
+    await BlocProvider.of<MusicCubit>(context).setupSongModels().then(
       (value) {
         Navigator.pushReplacement(context, MaterialPageRoute(
           builder: (context) {
@@ -41,7 +39,14 @@ class _SplashViewState extends State<SplashView> {
       child: SafeArea(
           child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: Center(child: Image.asset(kApplicationIMage)),
+        body: Center(
+            child: Column(
+          children: [
+            Image.asset(kApplicationIMage),
+            addHieghtSpace(32),
+            const Text("Refresh Audio Files, Please wait")
+          ],
+        )),
       )),
     );
   }

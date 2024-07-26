@@ -1,33 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:music_player_app/constants.dart';
+import 'package:music_player_app/models/my_song_model.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class MusicPlayingViewArtWork extends StatelessWidget {
   const MusicPlayingViewArtWork({
     super.key,
-    required this.songModel,
+    required this.mySongModel,
   });
 
-  final SongModel songModel;
+  final MySongModel mySongModel;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.width - 100,
       width: MediaQuery.of(context).size.width - 100,
-      child: QueryArtworkWidget(
-        artworkBorder: BorderRadius.circular(16),
-        id: songModel.id,
-        type: ArtworkType.AUDIO,
-        artworkFit: BoxFit.cover,
-        size: 512,
-        nullArtworkWidget: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Image.asset(
-            "assets/music_jpeg_4x.jpg",
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
+      child: mySongModel.artworkString == null
+          ? ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.asset(
+                kApplicationIMage,
+                fit: BoxFit.cover,
+              ),
+            )
+          : ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.memory(
+                mySongModel.artworkString!,
+                fit: BoxFit.cover,
+              ),
+            ),
     );
   }
 }

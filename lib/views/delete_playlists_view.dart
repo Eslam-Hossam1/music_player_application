@@ -10,6 +10,7 @@ import 'package:music_player_app/cubits/add_and_delete_playlist_songs_cubit/add_
 import 'package:music_player_app/cubits/music_cubit/music_cubit.dart';
 import 'package:music_player_app/cubits/playlist_cubit/playlist_cubit.dart';
 import 'package:music_player_app/models/my_song_model.dart';
+import 'package:music_player_app/widgets/custome_elevated_button.dart';
 import 'package:music_player_app/widgets/custome_elevated_button_Icon.dart';
 import 'package:music_player_app/widgets/playlist_item.dart';
 import 'package:music_player_app/widgets/song_item.dart';
@@ -46,52 +47,47 @@ class _DeletePlaylistsViewState extends State<DeletePlaylistsView> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          body: Column(
+          body: Stack(
             children: [
-              Expanded(
-                child: ListView.builder(
-                  itemCount: widget.playlistsList.length,
-                  itemBuilder: (context, index) {
-                    bool isChecked = checkedStates[index];
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          isChecked = !isChecked;
-                          checkedStates[index] = isChecked;
-                          if (isChecked) {
-                            toDeletePlaylistModelsList
-                                .add(widget.playlistsList[index]);
-                          } else {
-                            toDeletePlaylistModelsList
-                                .remove(widget.playlistsList[index]);
-                          }
-                        });
-                      },
-                      child: Stack(
-                        children: [
-                          PlaylistItem(
-                            myPlaylistModel: widget.playlistsList[index],
-                          ),
-                          Positioned(
-                            right: 0,
-                            child: Icon(isChecked
-                                ? Icons.check_box_rounded
-                                : Icons.check_box_outline_blank),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+              ListView.builder(
+                itemCount: widget.playlistsList.length,
+                itemBuilder: (context, index) {
+                  bool isChecked = checkedStates[index];
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isChecked = !isChecked;
+                        checkedStates[index] = isChecked;
+                        if (isChecked) {
+                          toDeletePlaylistModelsList
+                              .add(widget.playlistsList[index]);
+                        } else {
+                          toDeletePlaylistModelsList
+                              .remove(widget.playlistsList[index]);
+                        }
+                      });
+                    },
+                    child: Stack(
+                      children: [
+                        PlaylistItem(
+                          myPlaylistModel: widget.playlistsList[index],
+                        ),
+                        Positioned(
+                          right: 12,
+                          top: 12,
+                          child: Icon(isChecked
+                              ? Icons.check_box_rounded
+                              : Icons.check_box_outline_blank),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CustomeElvatedButtonIcon(
-                  backgroundColor: Color(0xff30314d),
-                  internalColor: Colors.white,
-                  text: "Confirm",
-                  iconData: Icons.add_box_rounded,
-                  onPresed: () {
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: CustomeElevatedButton(
+                  onPressed: () {
                     BlocProvider.of<AddAndDeletePlaylistCubit>(context)
                         .deletePlayLists(
                       toDeletePlaylistsModels: toDeletePlaylistModelsList,

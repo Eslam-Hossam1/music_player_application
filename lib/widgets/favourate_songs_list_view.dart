@@ -131,6 +131,7 @@ class _FavourateSongsListViewState extends State<FavourateSongsListView>
                     padding: const EdgeInsets.only(
                         left: 14.0, right: 14, bottom: 8, top: 2),
                     child: SongItem(
+                      mySongModel: mySongModelList[index],
                       isActive: currentIndex == index,
                       songModel: mySongModelList[index].toSongModel(),
                     ),

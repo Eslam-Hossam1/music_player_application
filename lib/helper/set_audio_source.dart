@@ -17,6 +17,7 @@ Future<void> setupAudioPlayer(
               : null,
         )));
   }
+
   await audioPlayer
       .setAudioSource(ConcatenatingAudioSource(children: audioSourceList));
 }

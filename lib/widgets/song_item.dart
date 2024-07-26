@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:music_player_app/constants.dart';
 import 'package:music_player_app/helper/add_space.dart';
+import 'package:music_player_app/models/my_song_model.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class SongItem extends StatelessWidget {
@@ -7,7 +9,9 @@ class SongItem extends StatelessWidget {
     super.key,
     required this.songModel,
     required this.isActive,
+    required this.mySongModel,
   });
+  final MySongModel mySongModel;
   final SongModel songModel;
   final bool isActive;
   @override
@@ -32,26 +36,23 @@ class SongItem extends StatelessWidget {
             height: 60,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: QueryArtworkWidget(
-                id: songModel.id,
-                type: ArtworkType.AUDIO,
-                artworkFit: BoxFit.cover,
-                artworkBorder: BorderRadius.circular(0),
-                keepOldArtwork: true,
-                nullArtworkWidget: Image.asset(
-                  "assets/music_jpeg_4x.jpg",
-                  fit: BoxFit.cover,
-                ),
-              ),
+              child: mySongModel.artworkString == null
+                  ? Image.asset(
+                      kApplicationIMage,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.memory(
+                      mySongModel.artworkString!,
+                      fit: BoxFit.cover,
+                    ),
             ),
           ),
           Expanded(
             child: ListTile(
-              contentPadding: isActive
-                  ? const EdgeInsets.only(
-                      top: 16, bottom: 16, left: 12, right: 14)
-                  : const EdgeInsets.only(
-                      top: 8, bottom: 8, left: 12, right: 14),
+              contentPadding: // isActive
+                  //     ? const EdgeInsets.only(
+                  //         top: 16, bottom: 16, left: 12, right: 14)
+                  const EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 14),
               title: Padding(
                 padding: const EdgeInsets.only(
                   bottom: 4.0,
@@ -76,24 +77,6 @@ class SongItem extends StatelessWidget {
                           ? songModel.title
                           : songModel.artist!,
                       style: const TextStyle(fontSize: 12),
-                    ),
-                  ),
-                  addWidthSpace(10),
-                  const SizedBox(
-                    width: 10,
-                    child: Text(
-                      overflow: TextOverflow.ellipsis,
-                      "-",
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ),
-                  addWidthSpace(10),
-                  const SizedBox(
-                    width: 40,
-                    child: Text(
-                      overflow: TextOverflow.ellipsis,
-                      "3:24",
-                      style: TextStyle(fontSize: 14),
                     ),
                   ),
                 ],

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -51,12 +50,25 @@ class _CustomeSliderState extends State<CustomeSlider> {
     );
   }
 
-  // @override
-  // void dispose() {
-  //   _durationSubscription.cancel();
-  //   _positionSubscription.cancel();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    _durationSubscription.cancel();
+    _positionSubscription.cancel();
+    super.dispose();
+  }
+
+  String formatDuration(Duration duration) {
+    int hours = duration.inHours;
+    int minutes = duration.inMinutes.remainder(60);
+    int seconds = duration.inSeconds.remainder(60);
+
+    String hoursStr = hours > 0 ? '$hours:' : '';
+    String minutesStr =
+        (hours > 0 && minutes < 10) ? '0$minutes:' : '$minutes:';
+    String secondsStr = seconds.toString().padLeft(2, '0');
+
+    return '$hoursStr$minutesStr$secondsStr';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +92,7 @@ class _CustomeSliderState extends State<CustomeSlider> {
             children: [
               Text(
                 overflow: TextOverflow.ellipsis,
-                position.toString().split('.')[0],
+                formatDuration(position),
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
@@ -89,7 +101,7 @@ class _CustomeSliderState extends State<CustomeSlider> {
               ),
               Text(
                 overflow: TextOverflow.ellipsis,
-                duration.toString().split('.')[0],
+                formatDuration(duration),
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,

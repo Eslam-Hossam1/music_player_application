@@ -45,8 +45,8 @@ dependencies:
   hive: ^2.2.3
   bloc: ^8.1.4
   flutter_bloc: ^8.1.6
-  flutter_native_splash: ^2.4.1
   watcher: ^1.1.0
+  marquee: ^2.2.3
 
 
 dev_dependencies:
@@ -68,10 +68,7 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
-flutter_native_splash:
-  color: "#ffffff"
-  android: true
-  ios: true
+
 flutter:
 
   # The following line ensures that the Material Icons font is
@@ -81,7 +78,6 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/download.jpg
     - assets/music_jpeg_4x.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -95,10 +91,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: Rubik
-      fonts:
-        - asset: assets/Rubik-Regular.ttf
+  # fonts:
+  #   - family: Rubik
+  #     fonts:
+  #       - asset: assets/Rubik-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

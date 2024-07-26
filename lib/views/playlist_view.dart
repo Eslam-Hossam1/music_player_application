@@ -25,8 +25,10 @@ import 'package:music_player_app/widgets/song_item.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class PlaylistView extends StatefulWidget {
-  const PlaylistView({super.key, required this.myPlaylistModel});
+  const PlaylistView(
+      {super.key, required this.myPlaylistModel, this.songModel});
   final MyPlaylistModel myPlaylistModel;
+  final MySongModel? songModel;
 
   @override
   State<PlaylistView> createState() => _PlaylistViewState();
@@ -35,6 +37,7 @@ class PlaylistView extends StatefulWidget {
 class _PlaylistViewState extends State<PlaylistView> {
   late int currentIndex;
   late List<MySongModel> playlistSongModels;
+
   @override
   void initState() {
     super.initState();
@@ -176,24 +179,20 @@ class _PlaylistViewState extends State<PlaylistView> {
                             tag: "lol2",
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(12),
-                              child: widget.myPlaylistModel.mysongModelsIdList
-                                      .isEmpty
+                              child: widget.songModel == null
                                   ? Image.asset(
                                       "assets/music_jpeg_4x.jpg",
                                       fit: BoxFit.cover,
                                     )
-                                  : QueryArtworkWidget(
-                                      id: widget.myPlaylistModel
-                                          .mysongModelsIdList[0],
-                                      type: ArtworkType.AUDIO,
-                                      artworkFit: BoxFit.cover,
-                                      artworkBorder: BorderRadius.zero,
-                                      size: 512,
-                                      nullArtworkWidget: Image.asset(
-                                        "assets/music_jpeg_4x.jpg",
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
+                                  : widget.songModel!.artworkString == null
+                                      ? Image.asset(
+                                          kApplicationIMage,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Image.memory(
+                                          widget.songModel!.artworkString!,
+                                          fit: BoxFit.cover,
+                                        ),
                             ),
                           ),
                         ),
@@ -357,6 +356,7 @@ class _PlaylistViewState extends State<PlaylistView> {
                                                   .audioPlayer);
                                     },
                                     child: SongItem(
+                                      mySongModel: playlistSongModels[index],
                                       isActive: currentIndex == index,
                                       songModel: playlistSongModels[index]
                                           .toSongModel(),
@@ -367,6 +367,9 @@ class _PlaylistViewState extends State<PlaylistView> {
                             );
                     }),
                   ],
+                ),
+                SliverToBoxAdapter(
+                  child: addHieghtSpace(85),
                 ),
                 Positioned(bottom: 0, child: BottomMusicContainer())
               ],

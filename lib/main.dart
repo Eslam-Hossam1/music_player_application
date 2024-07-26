@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:music_player_app/constants.dart';
@@ -18,6 +17,13 @@ import 'package:music_player_app/views/splash_view.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart';
+
+Future<void> requestPermissions() async {
+  await [
+    Permission.storage,
+    Permission.manageExternalStorage,
+  ].request();
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,14 +43,13 @@ Future<void> main() async {
   await Hive.openBox<int>(kLastSongIdPlayedBox);
   await Hive.openBox<MyPlaylistModel>('myPlaylistModelBox');
   await Hive.openBox(kFlagBox);
-  await Permission.storage.request();
+  await requestPermissions();
   if (Hive.box(kFlagBox).get(kOpenedBeforeKey) == null) {
     await Hive.box(kFlagBox).put(kOpenedBeforeKey, false);
   } else {
     bool needToSetUp = await checkChangeOccuredInDeviceSongsFiles();
     await Hive.box(kFlagBox).put(kOpenedBeforeKey, !needToSetUp);
   }
-  FlutterNativeSplash.remove();
   runApp(const MusicApp());
 }
 

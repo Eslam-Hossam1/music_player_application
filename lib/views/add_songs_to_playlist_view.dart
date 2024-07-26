@@ -92,6 +92,7 @@ class _AddSongsToPlaylistViewState extends State<AddSongsToPlaylistView> {
                       log(mySongModelList[index].id.toString());
                     },
                     child: CheckboxSongItem(
+                      mySongModel: mySongModelList[index],
                       songModel: mySongModelList[index].toSongModel(),
                       isChecked: isChecked,
                     ),

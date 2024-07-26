@@ -33,12 +33,8 @@ class MusicPlayingView extends StatefulWidget {
 }
 
 class _MusicPlayingViewState extends State<MusicPlayingView> {
-  // PaletteColor paletteColorList = PaletteColor(Colors.green, 2);
-  //bool isPlaying = false;
-  // final List<AudioSource> songsSourcesList = [];
   late int currentIndex;
 
-  // ImageProvider? artworkImageProvider;
   bool firstBuild = true;
   @override
   void initState() {
@@ -48,11 +44,7 @@ class _MusicPlayingViewState extends State<MusicPlayingView> {
       listenToSongIndex();
     } else {
       currentIndex = widget.currentIndex;
-      // setAudioSource().then((_) {
-      //   widget.audioPlayer.play();
-      //   listenToSongIndex();
-      //  });
-      log("hello this music playingg view and this is the first item of songModels list ${widget.mySongModelsList[0].title}");
+
       setupAudioPlayer(
               audioPlayer: widget.audioPlayer,
               mySongModelList: widget.mySongModelsList)
@@ -60,77 +52,36 @@ class _MusicPlayingViewState extends State<MusicPlayingView> {
         (value) async {
           seekToCurrenIndex(currentIndex);
           widget.audioPlayer.play();
-          // widget.audioPlayer.setShuffleModeEnabled(true);
-          // log("shuffel mode " +
-          //     widget.audioPlayer.shuffleModeEnabled.toString());
+
           listenToSongIndex();
           BlocProvider.of<BottomMusicContainerCubit>(context)
               .inializeBottomMusicContainer(
                   currentIndex: currentIndex,
                   audioPlayer: widget.audioPlayer,
                   songModelList: widget.mySongModelsList);
-          // listenToPlayingState();
-          //  isPlaying = true;
         },
       );
     }
   }
 
-  // Future<void> updatePaletteGenerator() async {
-  //   try {
-  //     Uint8List? artworkBytes = await OnAudioQuery().queryArtwork(
-  //         widget.songModelsList[currentIndex].id, ArtworkType.AUDIO);
-
-  //     if (artworkBytes != null) {
-  //       artworkImageProvider = MemoryImage(artworkBytes);
-  //     } else {
-  //       artworkImageProvider = AssetImage('assets/default_artwork.png');
-  //     }
-
-  //     PaletteGenerator pg = await PaletteGenerator.fromImageProvider(
-  //       artworkImageProvider!,
-  //     );
-
-  //     setState(() {
-  //       paletteColorList = pg.darkVibrantColor ?? PaletteColor(Colors.grey, 2);
-  //     });
-  //   } catch (e) {
-  //     log(e.toString());
-  //     setState(() {
-  //       artworkImageProvider = AssetImage('assets/default_artwork.png');
-  //     });
-  //   }
-  // }
-
   Future<void> seekToCurrenIndex(int index) async {
     await widget.audioPlayer.seek(Duration.zero, index: index);
   }
 
-  //play and pause button
   void listenToPlayingState() {
     widget.audioPlayer.playerStateStream.listen((state) {
       if (state.playing) {
         if (mounted) {
-          setState(() {
-            //    isPlaying = true;
-          });
+          setState(() {});
         }
       } else {
         if (mounted) {
-          setState(() {
-            //   isPlaying = false;
-          });
+          setState(() {});
         }
       }
-      // if (state.processingState == ProcessingState.completed) {
-      //   setState(() {
-      //     isPlaying = false;
-      //   });
-      // }
     });
   }
 
-  //entire view
   void listenToSongIndex() {
     widget.audioPlayer.currentIndexStream.listen((event) {
       if (event != null && mounted) {
@@ -142,40 +93,9 @@ class _MusicPlayingViewState extends State<MusicPlayingView> {
             currentIndex = event;
           });
         }
-        // await updatePaletteGenerator();
       }
     });
   }
-
-  // Future<void> setAudioSource() async {
-  //   for (var element in widget.songModelsList) {
-  //     final artwork =
-  //         await OnAudioQuery().queryArtwork(element.id, ArtworkType.AUDIO);
-  //     String? artworkUri;
-
-  //     if (artwork != null) {
-  //       final tempDir = await getTemporaryDirectory();
-  //       final file = await File('${tempDir.path}/${element.id}.png')
-  //           .writeAsBytes(artwork);
-  //       artworkUri = file.uri.toString();
-  //     }
-
-  //     songsSourcesList.add(AudioSource.uri(
-  //       Uri.parse(element.uri!),
-  //       tag: MediaItem(
-  //         id: element.id.toString(),
-  //         album: element.album,
-  //         title: element.title,
-  //         artUri: artworkUri != null ? Uri.parse(artworkUri) : null,
-  //       ),
-  //     ));
-  //   }
-  //   await widget.audioPlayer.setAudioSource(
-  //     ConcatenatingAudioSource(children: songsSourcesList),
-  //     initialIndex: currentIndex,
-  //   );
-  //   log("Audio source set");
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -207,18 +127,19 @@ class _MusicPlayingViewState extends State<MusicPlayingView> {
             Hero(
               tag: "lol",
               child: MusicPlayingViewArtWork(
-                songModel: widget.mySongModelsList[currentIndex].toSongModel(),
+                mySongModel: widget.mySongModelsList[currentIndex],
               ),
             ),
-            const Spacer(),
+            addHieghtSpace(MediaQuery.of(context).size.height * .1),
             Column(
               children: [
-                addHieghtSpace(12),
-                MusicPlayingViewListTile(
-                  mySongModel: widget.mySongModelsList[currentIndex],
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * .15,
+                  child: MusicPlayingViewListTile(
+                    mySongModel: widget.mySongModelsList[currentIndex],
+                  ),
                 ),
                 CustomeSlider(audioPlayer: widget.audioPlayer),
-                addHieghtSpace(24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -268,18 +189,22 @@ class _MusicPlayingViewState extends State<MusicPlayingView> {
                 ),
               ],
             ),
-            Expanded(
-                child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                DetailsButton(
-                  mySongModel: widget.mySongModelsList[currentIndex],
-                ),
-                ShuffleButton(
-                  audioPlayer: widget.audioPlayer,
-                )
-              ],
-            ))
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: SizedBox(
+                  height: MediaQuery.of(context).size.height * .05,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      DetailsButton(
+                        mySongModel: widget.mySongModelsList[currentIndex],
+                      ),
+                      ShuffleButton(
+                        audioPlayer: widget.audioPlayer,
+                      )
+                    ],
+                  )),
+            )
           ],
         ),
       ),

@@ -64,17 +64,14 @@ class MusicCubit extends Cubit<MusicState> {
             pg.lightVibrantColor ??
             PaletteColor(Colors.white, 2);
 
-        return MySongModel.fromSongModel(
-            songModel, artworkUri, primaryPaletteColor, secondaryPaletteColor);
+        return MySongModel.fromSongModel(songModel, artworkUri,
+            primaryPaletteColor, secondaryPaletteColor, artwork);
       }));
 
       await mySongModelbox.addAll(mySongModels);
       myPublicSongModelList = fetchMySongModels();
       await Hive.box<int>(kLastSongIdPlayedBox)
           .put(kLastSongIdPlayedKey, mySongModels[0].id);
-      log(Hive.box<int>(kLastSongIdPlayedBox)
-          .get(kLastSongIdPlayedKey)
-          .toString());
       log("N.O Songs = ${songModelsList.length}");
     }
   }

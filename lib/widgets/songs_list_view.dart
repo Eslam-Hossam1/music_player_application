@@ -35,8 +35,7 @@ class _SongsListViewState extends State<SongsListView>
   void initState() {
     super.initState();
 
-    mySongModelList =
-        BlocProvider.of<MusicCubit>(context).myPublicSongModelList;
+    mySongModelList = BlocProvider.of<MusicCubit>(context).fetchMySongModels();
     currentIndex = getLastSongPlayedIndex(mySongModelList);
     BlocProvider.of<MusicCubit>(context).setupAudioPlayer(mySongModelList).then(
       (value) async {
@@ -165,6 +164,7 @@ class _SongsListViewState extends State<SongsListView>
             padding:
                 const EdgeInsets.only(left: 14.0, right: 14, bottom: 8, top: 2),
             child: SongItem(
+              mySongModel: mySongModelList[index],
               isActive: currentIndex == index,
               songModel: mySongModelList[index].toSongModel(),
             ),

@@ -28,7 +28,7 @@ class _AddPlaylistDialoagState extends State<AddPlaylistDialoag> {
         backgroundColor: Color.fromARGB(255, 59, 37, 74),
         child: Container(
             margin: EdgeInsets.all(16),
-            height: 150,
+            height: 170,
             width: 50,
             child: BlocConsumer<AddAndDeletePlaylistCubit,
                 AddAndDeletePlaylistStates>(

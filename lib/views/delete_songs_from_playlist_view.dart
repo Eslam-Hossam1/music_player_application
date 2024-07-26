@@ -93,6 +93,7 @@ class _DeleteSongsFromPlaylistViewState
                     child: CheckboxSongItem(
                       songModel: mySongModelList[index].toSongModel(),
                       isChecked: isChecked,
+                      mySongModel: mySongModelList[index],
                     ),
                   );
                 },
