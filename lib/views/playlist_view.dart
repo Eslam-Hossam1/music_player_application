@@ -22,6 +22,7 @@ import 'package:music_player_app/views/playlist_music_playing_view.dart';
 import 'package:music_player_app/widgets/bottom_music_container.dart';
 import 'package:music_player_app/widgets/custome_elevated_button_Icon.dart';
 import 'package:music_player_app/widgets/custome_popup_button.dart';
+import 'package:music_player_app/widgets/playlist_view_play_all_button.dart';
 import 'package:music_player_app/widgets/playlist_view_shuffle_button.dart';
 import 'package:music_player_app/widgets/song_item.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -151,35 +152,8 @@ class _PlaylistViewState extends State<PlaylistView> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                CustomeElvatedButtonIcon(
-                                  onPresed: () {
-                                    BlocProvider.of<MusicCubit>(context)
-                                        .audioPlayer
-                                        .stop();
-
-                                    BlocProvider.of<PlaylistCubit>(context)
-                                        .audioPlayer
-                                      ..stop()
-                                      ..setShuffleModeEnabled(false);
-
-                                    Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) {
-                                        return MusicPlayingView(
-                                            audioPlayer:
-                                                BlocProvider.of<PlaylistCubit>(
-                                                        context)
-                                                    .audioPlayer,
-                                            mySongModelsList:
-                                                playlistSongModels,
-                                            currentIndex: 0);
-                                      },
-                                    ));
-                                  },
-                                  backgroundColor: Colors.white,
-                                  internalColor: const Color(0xff30314d),
-                                  text: "Play All",
-                                  iconData: Icons.play_arrow_rounded,
-                                ),
+                                PlaylistViewPlayAllButton(
+                                    playlistSongModels: playlistSongModels),
                                 PlaylistViewShuffelButton(
                                     playlistSongModels: playlistSongModels),
                               ],
