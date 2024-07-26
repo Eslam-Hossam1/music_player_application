@@ -46,12 +46,17 @@ dependencies:
   bloc: ^8.1.4
   flutter_bloc: ^8.1.6
   watcher: ^1.1.0
-  marquee: ^2.2.3
+  flutter_launcher_icons: ^0.13.1
 
 
 dev_dependencies:
   hive_generator: ^2.0.1
   build_runner: ^2.4.11
+flutter_icons:
+  ios: true
+  android: true
+  image_path: "assets/music_jpeg_4x.jpg"
+
   flutter_test:
     sdk: flutter
 

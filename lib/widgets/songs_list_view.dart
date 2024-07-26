@@ -56,7 +56,6 @@ class _SongsListViewState extends State<SongsListView>
         .seek(Duration.zero, index: index);
   }
 
-  //entire view
   void listenToSongIndex() {
     BlocProvider.of<MusicCubit>(context)
         .audioPlayer
@@ -69,13 +68,10 @@ class _SongsListViewState extends State<SongsListView>
         setState(() {
           currentIndex = event;
         });
-
-        // await updatePaletteGenerator();
       }
     });
   }
 
-  //play and pause button
   void listenToPlayingState() {
     BlocProvider.of<MusicCubit>(context)
         .audioPlayer
@@ -83,60 +79,15 @@ class _SongsListViewState extends State<SongsListView>
         .listen((state) {
       if (state.playing) {
         if (mounted) {
-          setState(() {
-            //    isPlaying = true;
-          });
+          setState(() {});
         }
       } else {
         if (mounted) {
-          setState(() {
-            //   isPlaying = false;
-          });
+          setState(() {});
         }
       }
-      // if (state.processingState == ProcessingState.completed) {
-      //   setState(() {
-      //     isPlaying = false;
-      //   });
-      // }
     });
   }
-  // Future<void> sourceInitailize(List<SongModel> songModelList) async {
-  //   List<AudioSource> audioSourceList = [];
-  //   for (SongModel songModel in songModelList) {
-  //     final artwork =
-  //         await OnAudioQuery().queryArtwork(songModel.id, ArtworkType.AUDIO);
-  //     String? artworkUri;
-
-  //     if (artwork != null) {
-  //       final tempDir = await getTemporaryDirectory();
-  //       final file = await File('${tempDir.path}/${songModel.id}.png')
-  //           .writeAsBytes(artwork);
-  //       artworkUri = file.uri.toString();
-  //     }
-  //     audioSourceList.add(AudioSource.uri(
-  //       Uri.parse(songModel.uri!),
-  //       tag: MediaItem(
-  //         id: songModel.id.toString(),
-  //         album: songModel.album,
-  //         title: songModel.title,
-  //         artUri: artworkUri != null ? Uri.parse(artworkUri) : null,
-  //       ),
-  //     ));
-  //   }
-  //   await audioPlayer
-  //       .setAudioSource(ConcatenatingAudioSource(children: audioSourceList));
-  //   log("hhhhh");
-  // }
-
-  // List<MySongModel> fetchSongs() {
-  //   List<MySongModel> mySongModelList =
-  //       Hive.box<MySongModel>(kMySongModelBox).values.toList();
-  //   mySongModelList.sort(
-  //     (a, b) => b.dateAdded!.compareTo(a.dateAdded!),
-  //   );
-  //   return mySongModelList;
-  // }
 
   @override
   Widget build(BuildContext context) {

@@ -30,39 +30,10 @@ class _FavourateSongsListViewState extends State<FavourateSongsListView>
   late int currentIndex;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     mySongModelList = fetchSongs();
     currentIndex = getLastSongPlayedIndex(mySongModelList);
   }
-
-  // Future<void> sourceInitailize(List<SongModel> songModelList) async {
-  //   List<AudioSource> audioSourceList = [];
-  //   for (SongModel songModel in songModelList) {
-  //     final artwork =
-  //         await OnAudioQuery().queryArtwork(songModel.id, ArtworkType.AUDIO);
-  //     String? artworkUri;
-
-  //     if (artwork != null) {
-  //       final tempDir = await getTemporaryDirectory();
-  //       final file = await File('${tempDir.path}/${songModel.id}.png')
-  //           .writeAsBytes(artwork);
-  //       artworkUri = file.uri.toString();
-  //     }
-  //     audioSourceList.add(AudioSource.uri(
-  //       Uri.parse(songModel.uri!),
-  //       tag: MediaItem(
-  //         id: songModel.id.toString(),
-  //         album: songModel.album,
-  //         title: songModel.title,
-  //         artUri: artworkUri != null ? Uri.parse(artworkUri) : null,
-  //       ),
-  //     ));
-  //   }
-  //   await audioPlayer
-  //       .setAudioSource(ConcatenatingAudioSource(children: audioSourceList));
-  //   log("hhhhh");
-  // }
 
   List<MySongModel> fetchSongs() {
     List<MySongModel> mySongModelList =
@@ -99,7 +70,7 @@ class _FavourateSongsListViewState extends State<FavourateSongsListView>
 
       return mySongModelList.isEmpty
           ? Center(
-              child: Text("There is no favourate song,Add one"),
+              child: Text("There is no favourate Song,  Add one"),
             )
           : ListView.builder(
               itemCount: mySongModelList.length,

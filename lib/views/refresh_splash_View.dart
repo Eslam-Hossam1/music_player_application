@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -21,6 +23,7 @@ class _RefreshSplashViewState extends State<RefreshSplashView> {
   }
 
   void _initializeData() async {
+    await Hive.box(kFlagBox).put(kOpenedBeforeKey, false);
     await BlocProvider.of<MusicCubit>(context).setupSongModels().then(
       (value) {
         Navigator.pushReplacement(context, MaterialPageRoute(

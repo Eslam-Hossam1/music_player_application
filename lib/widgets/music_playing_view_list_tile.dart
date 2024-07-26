@@ -27,7 +27,7 @@ class MusicPlayingViewListTile extends StatelessWidget {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Colors.white.withOpacity(.95),
               ),
             ),
             subtitle: Text(

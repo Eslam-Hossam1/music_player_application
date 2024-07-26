@@ -44,7 +44,9 @@ class _EditPlaylistFormState extends State<EditPlaylistForm> {
               autofocus: true,
               controller: textEditingController,
               decoration: InputDecoration(
-                  suffixIcon: Icon(Icons.edit), hintText: "New Name"),
+                  errorStyle: TextStyle(color: Colors.red),
+                  suffixIcon: Icon(Icons.edit),
+                  hintText: "New Name"),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return "this field requrid";

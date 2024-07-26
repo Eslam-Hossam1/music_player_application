@@ -58,11 +58,18 @@ class _SearchViewState extends State<SearchView> {
             addHieghtSpace(12),
             CustomeTextField(
               onChanged: (value) async {
-                songModelsList = BlocProvider.of<MusicCubit>(context)
-                    .myPublicSongModelList
-                    .where((song) {
-                  return song.title.toLowerCase().contains(value.toLowerCase());
-                }).toList();
+                if (value.isEmpty) {
+                  songModelsList = [];
+                } else {
+                  songModelsList = BlocProvider.of<MusicCubit>(context)
+                      .myPublicSongModelList
+                      .where((song) {
+                    return song.title
+                        .toLowerCase()
+                        .contains(value.toLowerCase());
+                  }).toList();
+                }
+
                 await Future.delayed(Duration(milliseconds: 200));
                 setState(() {});
               },

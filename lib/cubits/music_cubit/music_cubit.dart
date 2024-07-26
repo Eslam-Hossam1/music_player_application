@@ -50,7 +50,7 @@ class MusicCubit extends Cubit<MusicState> {
 
         ImageProvider? artworkImageProvider = artwork != null
             ? MemoryImage(artwork)
-            : const AssetImage('assets/download.jpg');
+            : const AssetImage(kApplicationIMage);
 
         final pg =
             await PaletteGenerator.fromImageProvider(artworkImageProvider!);
@@ -89,8 +89,12 @@ class MusicCubit extends Cubit<MusicState> {
                 : null,
           )));
     }
-    await audioPlayer
-        .setAudioSource(ConcatenatingAudioSource(children: audioSourceList));
+    try {
+      await audioPlayer
+          .setAudioSource(ConcatenatingAudioSource(children: audioSourceList));
+    } on PlayerException catch (e) {
+      audioPlayer.stop();
+    }
   }
 
   List<MySongModel> fetchMySongModels() {

@@ -30,7 +30,9 @@ class _AddPlayListFormState extends State<AddPlayListForm> {
             TextFormField(
               autofocus: true,
               decoration: InputDecoration(
-                  suffixIcon: Icon(Icons.add), hintText: "Playlist Name"),
+                  errorStyle: TextStyle(color: Colors.red),
+                  suffixIcon: Icon(Icons.add),
+                  hintText: "Playlist Name"),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return "this field requrid";
