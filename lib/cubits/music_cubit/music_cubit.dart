@@ -31,7 +31,7 @@ class MusicCubit extends Cubit<MusicState> {
           .where((song) =>
               song.isMusic! &&
               !song.displayName.contains("AUD-") &&
-              !(song.displayName == "tone"))
+              !(song.title == "tone"))
           .toList();
 
       final mySongModels =

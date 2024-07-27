@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:music_player_app/cubits/add_and_delete_playlist_cubit/add_and_delete_playlist_cubit.dart';
+import 'package:music_player_app/helper/get_my_song_model_from_id.dart';
 import 'package:music_player_app/models/my_playlist_model.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player_app/cubits/playlist_cubit/playlist_cubit.dart';
+import 'package:music_player_app/models/my_song_model.dart';
 import 'package:music_player_app/widgets/custome_elevated_button.dart';
 import 'package:music_player_app/widgets/playlist_item.dart';
 
@@ -44,6 +46,14 @@ class _DeletePlaylistsViewState extends State<DeletePlaylistsView> {
                 itemCount: widget.playlistsList.length,
                 itemBuilder: (context, index) {
                   bool isChecked = checkedStates[index];
+                  MySongModel? songModel;
+                  if (widget
+                      .playlistsList[index].mysongModelsIdList.isNotEmpty) {
+                    songModel = getMySongModelFromId(
+                        widget.playlistsList[index].mysongModelsIdList[0]);
+                  } else {
+                    songModel = null;
+                  }
                   return GestureDetector(
                     onTap: () {
                       setState(() {
@@ -62,6 +72,7 @@ class _DeletePlaylistsViewState extends State<DeletePlaylistsView> {
                       children: [
                         PlaylistItem(
                           myPlaylistModel: widget.playlistsList[index],
+                          mySongModel: songModel,
                         ),
                         Positioned(
                           right: 12,
