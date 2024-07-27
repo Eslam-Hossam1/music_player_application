@@ -209,54 +209,60 @@ class _PlaylistViewState extends State<PlaylistView> {
                                 ),
                               ),
                             )
-                          : SliverList.builder(
-                              itemCount: playlistSongModels.length,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 14.0, right: 14, bottom: 8, top: 2),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      BlocProvider.of<MusicCubit>(context)
-                                          .audioPlayer
-                                          .stop();
-                                      BlocProvider.of<FavourateSongsCubit>(
-                                              context)
-                                          .audioPlayer
-                                          .stop();
-                                      Navigator.push(context, MaterialPageRoute(
-                                        builder: (context) {
-                                          return MusicPlayingView(
-                                              currentIndex: index,
-                                              audioPlayer: BlocProvider.of<
-                                                      PlaylistCubit>(context)
-                                                  .audioPlayer,
-                                              mySongModelsList:
-                                                  playlistSongModels);
-                                        },
-                                      ));
-                                      BlocProvider.of<
-                                                  AddAndDeletePlaylistSongsCubit>(
-                                              context)
-                                          .listenToSongIndex(
-                                              audioplayer: BlocProvider.of<
-                                                      PlaylistCubit>(context)
-                                                  .audioPlayer);
-                                    },
-                                    child: SongItem(
-                                      mySongModel: playlistSongModels[index],
-                                      isActive: currentIndex == index,
-                                      songModel: playlistSongModels[index]
-                                          .toSongModel(),
+                          : SliverPadding(
+                              padding: const EdgeInsets.only(bottom: 90),
+                              sliver: SliverList.builder(
+                                itemCount: playlistSongModels.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 14.0,
+                                        right: 14,
+                                        bottom: 8,
+                                        top: 2),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        BlocProvider.of<MusicCubit>(context)
+                                            .audioPlayer
+                                            .stop();
+                                        BlocProvider.of<FavourateSongsCubit>(
+                                                context)
+                                            .audioPlayer
+                                            .stop();
+                                        Navigator.push(context,
+                                            MaterialPageRoute(
+                                          builder: (context) {
+                                            return MusicPlayingView(
+                                                currentIndex: index,
+                                                audioPlayer: BlocProvider.of<
+                                                        PlaylistCubit>(context)
+                                                    .audioPlayer,
+                                                mySongModelsList:
+                                                    playlistSongModels);
+                                          },
+                                        ));
+                                        BlocProvider.of<
+                                                    AddAndDeletePlaylistSongsCubit>(
+                                                context)
+                                            .listenToSongIndex(
+                                                audioplayer: BlocProvider.of<
+                                                        PlaylistCubit>(context)
+                                                    .audioPlayer);
+                                      },
+                                      child: SongItem(
+                                        mySongModel: playlistSongModels[index],
+                                        isActive: currentIndex == index,
+                                        songModel: playlistSongModels[index]
+                                            .toSongModel(),
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
+                                  );
+                                },
+                              ),
                             );
                     }),
                   ],
                 ),
-                addHieghtSpace(85),
                 Positioned(bottom: 0, child: BottomMusicContainer())
               ],
             )),

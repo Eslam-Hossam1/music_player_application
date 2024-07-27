@@ -38,122 +38,128 @@ class _PlaylistsTabBarViewState extends State<PlaylistsTabBarView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return CustomScrollView(
-      physics: BouncingScrollPhysics(),
-      slivers: [
-        SliverToBoxAdapter(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              CustomeElvatedButtonIcon(
-                text: "Add PlayList",
-                iconData: Icons.add_box,
-                backgroundColor: Color(0xff30314d),
-                internalColor: Colors.white,
-                onPresed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return const AddPlaylistDialoag();
-                    },
-                  );
-                },
-              ),
-              CustomeElvatedButtonIcon(
-                text: "Delete PlayList",
-                iconData: CupertinoIcons.delete_solid,
-                backgroundColor: Color(0xff30314d),
-                internalColor: Colors.white,
-                onPresed: () {
-                  if (playlistModelsList.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        backgroundColor: Colors.grey.shade900,
-                        duration: Duration(milliseconds: 1500),
-                        content: Text(
-                          "there is no playlist to delete",
-                          style: TextStyle(color: Colors.white),
-                        )));
-                  } else {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 70),
+      child: CustomScrollView(
+        physics: BouncingScrollPhysics(),
+        slivers: [
+          SliverToBoxAdapter(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                CustomeElvatedButtonIcon(
+                  text: "Add PlayList",
+                  iconData: Icons.add_box,
+                  backgroundColor: Color(0xff30314d),
+                  internalColor: Colors.white,
+                  onPresed: () {
                     showDialog(
                       context: context,
                       builder: (context) {
-                        return DeletePlaylistsView(
-                          playlistsList: playlistModelsList,
-                        );
+                        return const AddPlaylistDialoag();
                       },
                     );
-                  }
-                },
-              ),
-            ],
-          ),
-        ),
-        SliverToBoxAdapter(child: addHieghtSpace(16)),
-        BlocBuilder<PlaylistCubit, PlaylistStates>(
-          builder: (context, state) {
-            playlistModelsList =
-                BlocProvider.of<PlaylistCubit>(context).myPlaylistModelsList;
-            if (state is PlaylistFailureState) {
-              return SliverToBoxAdapter(
-                child: Center(child: Text(state.errMsg)),
-              );
-            } else if (state is PlaylistLoadingState) {
-              return SliverToBoxAdapter(
-                child: Center(
-                  child: CircularProgressIndicator(),
+                  },
                 ),
-              );
-            } else {
-              return playlistModelsList.isEmpty
-                  ? SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * .25),
-                        child: Center(
-                          child: Text("There is no playlist , Add one"),
+                CustomeElvatedButtonIcon(
+                  text: "Delete PlayList",
+                  iconData: CupertinoIcons.delete_solid,
+                  backgroundColor: Color(0xff30314d),
+                  internalColor: Colors.white,
+                  onPresed: () {
+                    if (playlistModelsList.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: Colors.grey.shade900,
+                          duration: Duration(milliseconds: 1500),
+                          content: Text(
+                            "there is no playlist to delete",
+                            style: TextStyle(color: Colors.white),
+                          )));
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return DeletePlaylistsView(
+                            playlistsList: playlistModelsList,
+                          );
+                        },
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+          SliverToBoxAdapter(child: addHieghtSpace(16)),
+          BlocBuilder<PlaylistCubit, PlaylistStates>(
+            builder: (context, state) {
+              playlistModelsList =
+                  BlocProvider.of<PlaylistCubit>(context).myPlaylistModelsList;
+              if (state is PlaylistFailureState) {
+                return SliverToBoxAdapter(
+                  child: Center(child: Text(state.errMsg)),
+                );
+              } else if (state is PlaylistLoadingState) {
+                return SliverToBoxAdapter(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              } else {
+                return playlistModelsList.isEmpty
+                    ? SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.height * .25),
+                          child: Center(
+                            child: Text("There is no playlist , Add one"),
+                          ),
                         ),
-                      ),
-                    )
-                  : SliverList.builder(
-                      itemCount: playlistModelsList.length,
-                      itemBuilder: (context, index) {
-                        if (playlistModelsList[index]
-                            .mysongModelsIdList
-                            .isNotEmpty) {
-                          songModel = getMySongModelFromId(
-                              playlistModelsList[index].mysongModelsIdList[0]);
-                        } else {
-                          songModel = null;
-                        }
-                        return GestureDetector(
-                            onLongPress: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return EditPlaylistDialoag(
-                                      playlistModel: playlistModelsList[index]);
-                                },
-                              );
-                            },
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(
-                                builder: (context) {
-                                  return PlaylistView(
-                                    myPlaylistModel: playlistModelsList[index],
-                                  );
-                                },
+                      )
+                    : SliverList.builder(
+                        itemCount: playlistModelsList.length,
+                        itemBuilder: (context, index) {
+                          if (playlistModelsList[index]
+                              .mysongModelsIdList
+                              .isNotEmpty) {
+                            songModel = getMySongModelFromId(
+                                playlistModelsList[index]
+                                    .mysongModelsIdList[0]);
+                          } else {
+                            songModel = null;
+                          }
+                          return GestureDetector(
+                              onLongPress: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return EditPlaylistDialoag(
+                                        playlistModel:
+                                            playlistModelsList[index]);
+                                  },
+                                );
+                              },
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) {
+                                    return PlaylistView(
+                                      myPlaylistModel:
+                                          playlistModelsList[index],
+                                    );
+                                  },
+                                ));
+                              },
+                              child: PlaylistItem(
+                                myPlaylistModel: playlistModelsList[index],
+                                mySongModel: songModel,
                               ));
-                            },
-                            child: PlaylistItem(
-                              myPlaylistModel: playlistModelsList[index],
-                              mySongModel: songModel,
-                            ));
-                      },
-                    );
-            }
-          },
-        ),
-      ],
+                        },
+                      );
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }

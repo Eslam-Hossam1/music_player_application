@@ -71,43 +71,48 @@ class _FavourateSongsListViewState extends State<FavourateSongsListView>
           ? Center(
               child: Text("There is no favourate Song,  Add one"),
             )
-          : ListView.builder(
-              itemCount: mySongModelList.length,
-              physics: const BouncingScrollPhysics(),
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) {
-                        BlocProvider.of<MusicCubit>(context).audioPlayer.stop();
-                        BlocProvider.of<PlaylistCubit>(context)
-                            .audioPlayer
-                            .stop();
-                        return MusicPlayingView(
-                            currentIndex: index,
-                            audioPlayer:
-                                BlocProvider.of<FavourateSongsCubit>(context)
-                                    .audioPlayer,
-                            mySongModelsList: mySongModelList);
-                      },
-                    ));
-                    BlocProvider.of<FavourateSongsCubit>(context)
-                        .listenToSongIndex(
-                            audioplayer:
-                                BlocProvider.of<FavourateSongsCubit>(context)
-                                    .audioPlayer);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 14.0, right: 14, bottom: 8, top: 2),
-                    child: SongItem(
-                      mySongModel: mySongModelList[index],
-                      isActive: currentIndex == index,
-                      songModel: mySongModelList[index].toSongModel(),
+          : Padding(
+              padding: const EdgeInsets.only(bottom: 70),
+              child: ListView.builder(
+                itemCount: mySongModelList.length,
+                physics: const BouncingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) {
+                          BlocProvider.of<MusicCubit>(context)
+                              .audioPlayer
+                              .stop();
+                          BlocProvider.of<PlaylistCubit>(context)
+                              .audioPlayer
+                              .stop();
+                          return MusicPlayingView(
+                              currentIndex: index,
+                              audioPlayer:
+                                  BlocProvider.of<FavourateSongsCubit>(context)
+                                      .audioPlayer,
+                              mySongModelsList: mySongModelList);
+                        },
+                      ));
+                      BlocProvider.of<FavourateSongsCubit>(context)
+                          .listenToSongIndex(
+                              audioplayer:
+                                  BlocProvider.of<FavourateSongsCubit>(context)
+                                      .audioPlayer);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 14.0, right: 14, bottom: 8, top: 2),
+                      child: SongItem(
+                        mySongModel: mySongModelList[index],
+                        isActive: currentIndex == index,
+                        songModel: mySongModelList[index].toSongModel(),
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             );
     });
   }

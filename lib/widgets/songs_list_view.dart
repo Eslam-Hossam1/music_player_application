@@ -87,36 +87,39 @@ class _SongsListViewState extends State<SongsListView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return ListView.builder(
-      itemCount: mySongModelList.length,
-      physics: const BouncingScrollPhysics(),
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: () {
-            BlocProvider.of<FavourateSongsCubit>(context).audioPlayer.stop();
-            BlocProvider.of<PlaylistCubit>(context).audioPlayer.stop();
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) {
-                return MusicPlayingView(
-                    currentIndex: index,
-                    audioPlayer:
-                        BlocProvider.of<MusicCubit>(context).audioPlayer,
-                    mySongModelsList: mySongModelList);
-              },
-            ));
-            listenToSongIndex();
-          },
-          child: Padding(
-            padding:
-                const EdgeInsets.only(left: 14.0, right: 14, bottom: 8, top: 2),
-            child: SongItem(
-              mySongModel: mySongModelList[index],
-              isActive: currentIndex == index,
-              songModel: mySongModelList[index].toSongModel(),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 70),
+      child: ListView.builder(
+        itemCount: mySongModelList.length,
+        physics: const BouncingScrollPhysics(),
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              BlocProvider.of<FavourateSongsCubit>(context).audioPlayer.stop();
+              BlocProvider.of<PlaylistCubit>(context).audioPlayer.stop();
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return MusicPlayingView(
+                      currentIndex: index,
+                      audioPlayer:
+                          BlocProvider.of<MusicCubit>(context).audioPlayer,
+                      mySongModelsList: mySongModelList);
+                },
+              ));
+              listenToSongIndex();
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  left: 14.0, right: 14, bottom: 8, top: 2),
+              child: SongItem(
+                mySongModel: mySongModelList[index],
+                isActive: currentIndex == index,
+                songModel: mySongModelList[index].toSongModel(),
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
