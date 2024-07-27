@@ -24,11 +24,8 @@ class _RefreshSplashViewState extends State<RefreshSplashView> {
   }
 
   void _initializeData() async {
-    log("inialize data");
     await Hive.box(kFlagBox).put(kOpenedBeforeKey, false);
-    log("cache to false");
     if (widget.msgStr == "add") {
-      log("to add");
       await handleSongsAdded().then((e) {
         Navigator.pushReplacement(context, MaterialPageRoute(
           builder: (context) {
@@ -37,8 +34,6 @@ class _RefreshSplashViewState extends State<RefreshSplashView> {
         ));
       });
     } else if (widget.msgStr == "delete") {
-      log("to delete");
-
       await handleSongsRemoved().then((e) async {
         Navigator.pushReplacement(context, MaterialPageRoute(
           builder: (context) {
@@ -47,7 +42,6 @@ class _RefreshSplashViewState extends State<RefreshSplashView> {
         ));
       });
     } else {
-      log("to modify");
       await BlocProvider.of<MusicCubit>(context).setupSongModels().then(
         (value) {
           Navigator.pushReplacement(context, MaterialPageRoute(

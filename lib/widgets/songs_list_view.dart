@@ -31,7 +31,6 @@ class _SongsListViewState extends State<SongsListView>
   @override
   void initState() {
     super.initState();
-    log("shit 3");
     mySongModelList = BlocProvider.of<MusicCubit>(context).fetchMySongModels();
     currentIndex = getLastSongPlayedIndex(mySongModelList);
     BlocProvider.of<MusicCubit>(context).setupAudioPlayer(mySongModelList).then(

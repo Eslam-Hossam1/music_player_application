@@ -10,21 +10,20 @@ import 'package:palette_generator/palette_generator.dart';
 import 'package:path_provider/path_provider.dart';
 
 Future<void> handleSongsAdded() async {
-  log("start 0");
   List<SongModel> toAddSongModels = [];
-  log("start 1");
+
   var mySongModelbox = Hive.box<MySongModel>(kMySongModelBox);
-  log("start 2");
+
   List<MySongModel> databaseSongModels =
       Hive.box<MySongModel>(kMySongModelBox).values.toList();
-  log("start 3");
+
   List<SongModel> deviceSongModels = (await OnAudioQuery().querySongs())
       .where((song) =>
           song.isMusic! &&
           !song.displayName.contains("AUD-") &&
           !(song.title == "tone"))
       .toList();
-  log("start 4");
+
   for (int i = 0; i < deviceSongModels.length; i++) {
     bool isFound = false;
     for (int j = 0; j < databaseSongModels.length; j++) {
@@ -37,7 +36,7 @@ Future<void> handleSongsAdded() async {
       toAddSongModels.add(deviceSongModels[i]);
     }
   }
-  log("start 5");
+
   final mySongModels = await Future.wait(toAddSongModels.map((songModel) async {
     final artwork =
         await OnAudioQuery().queryArtwork(songModel.id, ArtworkType.AUDIO);
@@ -67,22 +66,17 @@ Future<void> handleSongsAdded() async {
     return MySongModel.fromSongModel(songModel, artworkUri, primaryPaletteColor,
         secondaryPaletteColor, artwork);
   }));
-  log("start 6");
+
   await mySongModelbox.addAll(mySongModels);
-  log("start 7");
+
   await Hive.box(kFlagBox).put(kOpenedBeforeKey, true);
-  log("end");
 }
 
 Future<void> handleSongsRemoved() async {
-  log("start 0");
-
   List<MySongModel> toDeleteSongModels = [];
-  log("start 1");
 
   List<MySongModel> databaseSongModels =
       Hive.box<MySongModel>(kMySongModelBox).values.toList();
-  log("start 2");
 
   List<SongModel> deviceSongModels = (await OnAudioQuery().querySongs())
       .where((song) =>
@@ -90,7 +84,6 @@ Future<void> handleSongsRemoved() async {
           !song.displayName.contains("AUD-") &&
           !(song.title == "tone"))
       .toList();
-  log("start 3");
 
   for (int i = 0; i < databaseSongModels.length; i++) {
     bool isFound = false;
@@ -104,14 +97,11 @@ Future<void> handleSongsRemoved() async {
       toDeleteSongModels.add(databaseSongModels[i]);
     }
   }
-  log("start 4");
 
   for (var mySongModel in toDeleteSongModels) {
     log(mySongModel.title);
     await mySongModel.delete();
   }
-  log("start 5");
 
   await Hive.box(kFlagBox).put(kOpenedBeforeKey, true);
-  log("end");
 }

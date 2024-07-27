@@ -26,7 +26,6 @@ class _HomeViewState extends State<HomeView> {
     await Isolate.spawn(_watchFiles, receivePort.sendPort);
 
     receivePort.listen((message) {
-      log(message);
       String msgStr = message;
       if (mounted) {
         Navigator.pushReplacement(
@@ -55,13 +54,10 @@ class _HomeViewState extends State<HomeView> {
             event.type == ChangeType.REMOVE) {
           if (isAudioFile(event.path)) {
             if (event.type == ChangeType.ADD) {
-              log("1");
               sendPort.send("add");
             } else if (event.type == ChangeType.MODIFY) {
-              log("2");
               sendPort.send("modify");
             } else if (event.type == ChangeType.REMOVE) {
-              log("3");
               sendPort.send("delete");
             }
           }

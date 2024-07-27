@@ -25,7 +25,6 @@ class MusicCubit extends Cubit<MusicState> {
     if (Hive.box(kFlagBox).get(kOpenedBeforeKey) == false) {
       var mySongModelbox = Hive.box<MySongModel>(kMySongModelBox);
       await mySongModelbox.clear();
-      log("shit");
       List<SongModel> songModelsList = (await OnAudioQuery().querySongs())
           .where((song) =>
               song.isMusic! &&
