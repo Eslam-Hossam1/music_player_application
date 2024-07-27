@@ -1,14 +1,8 @@
-import 'dart:developer';
 import 'dart:isolate';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:music_player_app/constants.dart';
-import 'package:music_player_app/cubits/music_cubit/music_cubit.dart';
 import 'package:music_player_app/helper/check_is_audio.dart';
 import 'package:music_player_app/views/refresh_splash_View.dart';
-import 'package:music_player_app/views/splash_view.dart';
 import 'package:music_player_app/widgets/home_view_body.dart';
 import 'package:watcher/watcher.dart';
 

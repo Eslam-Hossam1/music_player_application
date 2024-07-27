@@ -123,11 +123,8 @@ class _FavourateMusicPlayingViewState extends State<FavourateMusicPlayingView> {
                     )),
               ),
             ),
-            Hero(
-              tag: "lol",
-              child: MusicPlayingViewArtWork(
-                mySongModel: widget.mySongModelsList[currentIndex],
-              ),
+            MusicPlayingViewArtWork(
+              mySongModel: widget.mySongModelsList[currentIndex],
             ),
             addHieghtSpace(MediaQuery.of(context).size.height * .1),
             Column(

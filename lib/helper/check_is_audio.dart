@@ -1,9 +1,3 @@
-import 'dart:io';
-import 'dart:isolate';
-
-import 'package:on_audio_query/on_audio_query.dart';
-import 'package:watcher/watcher.dart';
-
 const List<String> audioFileExtensions = [
   '.mp3',
   '.wav',

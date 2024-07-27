@@ -1,17 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player_app/constants.dart';
 import 'package:music_player_app/cubits/bottom_music_container_cubit/bottom_music_container_cubit.dart';
 import 'package:music_player_app/cubits/bottom_music_container_cubit/bottom_music_container_states.dart';
-import 'package:music_player_app/cubits/music_cubit/music_cubit.dart';
 import 'package:music_player_app/helper/add_space.dart';
 import 'package:music_player_app/views/music_playing_view.dart';
 import 'package:music_player_app/widgets/bottom_music_container_play_and_pause_button.dart';
 import 'package:music_player_app/widgets/bottom_music_container_seek_next_button.dart';
-import 'package:music_player_app/widgets/music_playing_view_artwork.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 
 class BottomMusicContainer extends StatelessWidget {
   const BottomMusicContainer({
@@ -83,17 +78,6 @@ class BottomMusicContainer extends StatelessWidget {
                                     .artworkString!,
                                 fit: BoxFit.cover,
                               ),
-                        // child: QueryArtworkWidget(
-                        //   artworkBorder: BorderRadius.zero,
-                        //   artworkFit: BoxFit.cover,
-                        //   id: bottomMusicCubit
-                        //       .songModelList![bottomMusicCubit.currentIndex!]
-                        //       .id,
-                        //   type: ArtworkType.AUDIO,
-                        //   keepOldArtwork: true,
-                        //   nullArtworkWidget:
-                        //       Image.asset("assets/music_jpeg_4x.jpg"),
-                        // ),
                       ),
                     ),
                   ),

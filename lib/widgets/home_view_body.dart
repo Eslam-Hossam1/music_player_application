@@ -3,7 +3,6 @@ import 'package:music_player_app/helper/add_space.dart';
 import 'package:music_player_app/views/search_view.dart';
 import 'package:music_player_app/widgets/bottom_music_container.dart';
 import 'package:music_player_app/widgets/custome_icon_button.dart';
-import 'package:music_player_app/widgets/custome_text_field.dart';
 import 'package:music_player_app/widgets/favourate_songs_list_view.dart';
 import 'package:music_player_app/widgets/playlists_tab_bar_view.dart';
 import 'package:music_player_app/widgets/songs_list_view.dart';

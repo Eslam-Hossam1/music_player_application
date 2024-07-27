@@ -72,7 +72,6 @@ class MusicCubit extends Cubit<MusicState> {
       myPublicSongModelList = fetchMySongModels();
       await Hive.box<int>(kLastSongIdPlayedBox)
           .put(kLastSongIdPlayedKey, mySongModels[0].id);
-      log("N.O Songs = ${songModelsList.length}");
     }
   }
 
@@ -92,7 +91,7 @@ class MusicCubit extends Cubit<MusicState> {
     try {
       await audioPlayer
           .setAudioSource(ConcatenatingAudioSource(children: audioSourceList));
-    } on PlayerException catch (e) {
+    } on PlayerException {
       audioPlayer.stop();
     }
   }

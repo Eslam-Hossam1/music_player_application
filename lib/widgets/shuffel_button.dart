@@ -13,7 +13,6 @@ class _ShuffleButtonState extends State<ShuffleButton> {
   late bool isShuffle;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     isShuffle = widget.audioPlayer.shuffleModeEnabled;
   }

@@ -1,5 +1,4 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:music_player_app/constants.dart';
 import 'package:music_player_app/models/my_song_model.dart';
 import 'package:on_audio_query/on_audio_query.dart';

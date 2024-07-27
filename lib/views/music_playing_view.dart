@@ -1,11 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:music_player_app/cubits/bottom_music_container_cubit/bottom_music_container_cubit.dart';
-import 'package:music_player_app/cubits/music_cubit/music_cubit.dart';
 import 'package:music_player_app/helper/add_space.dart';
 import 'package:music_player_app/helper/set_audio_source.dart';
 import 'package:music_player_app/models/my_song_model.dart';
@@ -124,11 +121,8 @@ class _MusicPlayingViewState extends State<MusicPlayingView> {
                     )),
               ),
             ),
-            Hero(
-              tag: "lol",
-              child: MusicPlayingViewArtWork(
-                mySongModel: widget.mySongModelsList[currentIndex],
-              ),
+            MusicPlayingViewArtWork(
+              mySongModel: widget.mySongModelsList[currentIndex],
             ),
             addHieghtSpace(MediaQuery.of(context).size.height * .1),
             Column(

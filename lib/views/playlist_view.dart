@@ -15,17 +15,12 @@ import 'package:music_player_app/helper/filter_database_playlist.dart';
 import 'package:music_player_app/helper/get_last_song_played_index.dart';
 import 'package:music_player_app/models/my_playlist_model.dart';
 import 'package:music_player_app/models/my_song_model.dart';
-import 'package:music_player_app/views/add_songs_to_playlist_view.dart';
-import 'package:music_player_app/views/delete_songs_from_playlist_view.dart';
 import 'package:music_player_app/views/music_playing_view.dart';
-import 'package:music_player_app/views/playlist_music_playing_view.dart';
 import 'package:music_player_app/widgets/bottom_music_container.dart';
-import 'package:music_player_app/widgets/custome_elevated_button_Icon.dart';
 import 'package:music_player_app/widgets/custome_popup_button.dart';
 import 'package:music_player_app/widgets/playlist_view_play_all_button.dart';
 import 'package:music_player_app/widgets/playlist_view_shuffle_button.dart';
 import 'package:music_player_app/widgets/song_item.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 
 class PlaylistView extends StatefulWidget {
   const PlaylistView(
@@ -110,25 +105,22 @@ class _PlaylistViewState extends State<PlaylistView> {
                           padding: EdgeInsets.symmetric(
                               horizontal:
                                   MediaQuery.of(context).size.width * .2),
-                          child: Hero(
-                            tag: "lol2",
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: widget.songModel == null
-                                  ? Image.asset(
-                                      "assets/music_jpeg_4x.jpg",
-                                      fit: BoxFit.cover,
-                                    )
-                                  : widget.songModel!.artworkString == null
-                                      ? Image.asset(
-                                          kApplicationIMage,
-                                          fit: BoxFit.cover,
-                                        )
-                                      : Image.memory(
-                                          widget.songModel!.artworkString!,
-                                          fit: BoxFit.cover,
-                                        ),
-                            ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: widget.songModel == null
+                                ? Image.asset(
+                                    "assets/music_jpeg_4x.jpg",
+                                    fit: BoxFit.cover,
+                                  )
+                                : widget.songModel!.artworkString == null
+                                    ? Image.asset(
+                                        kApplicationIMage,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image.memory(
+                                        widget.songModel!.artworkString!,
+                                        fit: BoxFit.cover,
+                                      ),
                           ),
                         ),
                       ),

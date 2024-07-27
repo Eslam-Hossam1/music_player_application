@@ -16,7 +16,6 @@ import 'package:music_player_app/models/my_song_model.dart';
 import 'package:music_player_app/views/splash_view.dart';
 
 import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter/services.dart';
 
 Future<void> requestPermissions() async {
   await [

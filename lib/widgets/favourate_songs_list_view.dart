@@ -10,7 +10,6 @@ import 'package:music_player_app/cubits/music_cubit/music_cubit.dart';
 import 'package:music_player_app/cubits/playlist_cubit/playlist_cubit.dart';
 import 'package:music_player_app/helper/get_last_song_played_index.dart';
 import 'package:music_player_app/models/my_song_model.dart';
-import 'package:music_player_app/views/favourate_music_playing_view.dart';
 import 'package:music_player_app/views/music_playing_view.dart';
 import 'package:music_player_app/widgets/song_item.dart';
 

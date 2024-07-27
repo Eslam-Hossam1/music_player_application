@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,8 +11,6 @@ import 'package:music_player_app/models/my_playlist_model.dart';
 import 'package:music_player_app/models/my_song_model.dart';
 import 'package:music_player_app/views/checkbox_song_item.dart';
 import 'package:music_player_app/widgets/custome_elevated_button.dart';
-import 'package:music_player_app/widgets/custome_elevated_button_Icon.dart';
-import 'package:music_player_app/widgets/song_item.dart';
 
 class AddSongsToPlaylistView extends StatefulWidget {
   const AddSongsToPlaylistView({super.key, required this.myPlaylistModel});

@@ -39,7 +39,7 @@ class PlaylistCubit extends Cubit<PlaylistStates> {
     try {
       await audioPlayer
           .setAudioSource(ConcatenatingAudioSource(children: audioSourceList));
-    } on PlayerException catch (e) {
+    } on PlayerException {
       audioPlayer.stop();
     }
   }

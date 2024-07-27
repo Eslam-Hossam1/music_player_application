@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:music_player_app/constants.dart';
 import 'package:music_player_app/cubits/music_cubit/music_cubit.dart';
 import 'package:music_player_app/cubits/playlist_cubit/playlist_cubit.dart';
 import 'package:music_player_app/cubits/playlist_cubit/playlist_state.dart';
@@ -15,8 +13,6 @@ import 'package:music_player_app/widgets/add_playlist_dialog.dart';
 import 'package:music_player_app/widgets/custome_elevated_button_Icon.dart';
 import 'package:music_player_app/widgets/edit_playlist_dialoag.dart';
 import 'package:music_player_app/widgets/playlist_item.dart';
-import 'package:music_player_app/widgets/song_item.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 
 class PlaylistsTabBarView extends StatefulWidget {
   const PlaylistsTabBarView({
@@ -30,6 +26,7 @@ class PlaylistsTabBarView extends StatefulWidget {
 class _PlaylistsTabBarViewState extends State<PlaylistsTabBarView>
     with AutomaticKeepAliveClientMixin {
   late List<MyPlaylistModel> playlistModelsList;
+  MySongModel? songModel;
   @override
   bool get wantKeepAlive => true;
   @override
@@ -142,13 +139,14 @@ class _PlaylistsTabBarViewState extends State<PlaylistsTabBarView>
                             );
                           },
                           onTap: () {
-                            MySongModel? songModel;
                             if (playlistModelsList[index]
                                 .mysongModelsIdList
                                 .isNotEmpty) {
                               songModel = getMysongModelFromId(
                                   playlistModelsList[index]
                                       .mysongModelsIdList[0]);
+                            } else {
+                              songModel = null;
                             }
                             Navigator.push(context, MaterialPageRoute(
                               builder: (context) {
@@ -159,8 +157,21 @@ class _PlaylistsTabBarViewState extends State<PlaylistsTabBarView>
                               },
                             ));
                           },
-                          child: PlaylistItem(
-                              myPlaylistModel: playlistModelsList[index]),
+                          child: Builder(builder: (context) {
+                            if (playlistModelsList[index]
+                                .mysongModelsIdList
+                                .isNotEmpty) {
+                              songModel = getMysongModelFromId(
+                                  playlistModelsList[index]
+                                      .mysongModelsIdList[0]);
+                            } else {
+                              songModel = null;
+                            }
+                            return PlaylistItem(
+                              myPlaylistModel: playlistModelsList[index],
+                              mySongModel: songModel,
+                            );
+                          }),
                         );
                       },
                     );

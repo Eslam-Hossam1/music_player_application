@@ -20,7 +20,7 @@ Future<void> setupAudioPlayer(
   try {
     await audioPlayer
         .setAudioSource(ConcatenatingAudioSource(children: audioSourceList));
-  } on PlayerException catch (e) {
+  } on PlayerException {
     audioPlayer.stop();
   }
 }

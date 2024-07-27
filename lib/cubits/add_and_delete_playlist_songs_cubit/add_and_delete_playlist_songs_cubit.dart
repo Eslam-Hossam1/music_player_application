@@ -1,10 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:music_player_app/constants.dart';
 import 'package:music_player_app/cubits/add_and_delete_playlist_songs_cubit/add_and_delete_playlist_songs_states.dart';
 import 'package:music_player_app/models/my_playlist_model.dart';
-import 'package:music_player_app/models/my_song_model.dart';
 
 class AddAndDeletePlaylistSongsCubit
     extends Cubit<AddAndDeletePlaylistSongsState> {

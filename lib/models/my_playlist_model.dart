@@ -1,5 +1,4 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:music_player_app/models/my_song_model.dart';
 
 part 'my_playlist_model.g.dart';
 
