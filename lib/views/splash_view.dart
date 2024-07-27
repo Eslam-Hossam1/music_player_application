@@ -21,7 +21,7 @@ class _SplashViewState extends State<SplashView> {
   void _initializeData() async {
     Future.wait([
       BlocProvider.of<MusicCubit>(context).setupSongModels(),
-      Future.delayed(Duration(milliseconds: 1500))
+      Future.delayed(Duration(seconds: 1))
     ]).then(
       (value) {
         Navigator.pushReplacement(context, MaterialPageRoute(

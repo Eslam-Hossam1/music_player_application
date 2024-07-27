@@ -1,5 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:music_player_app/constants.dart';
+import 'package:music_player_app/helper/handle_add_delete_audio_files.dart';
 import 'package:music_player_app/models/my_song_model.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
@@ -8,7 +9,7 @@ Future<bool> checkChangeOccuredInDeviceSongsFiles() async {
   deviceSongModelsList = deviceSongModelsList.where((song) {
     return song.isMusic! &&
         !song.displayName.contains("AUD-") &&
-        !(song.displayName == "tone");
+        !(song.title == "tone");
   }).toList();
   var databaseMySongModelsList =
       Hive.box<MySongModel>(kMySongModelBox).values.toList();
@@ -29,3 +30,21 @@ Future<bool> checkChangeOccuredInDeviceSongsFiles() async {
   }
   return false;
 }
+
+// Future<bool> checkChangeOccured() async {
+//   List<MySongModel> databaseMySongModels =
+//       Hive.box<MySongModel>(kMySongModelBox).values.toList();
+//   List<SongModel> deviceSongModels = (await OnAudioQuery().querySongs())
+//       .where((song) =>
+//           song.isMusic! &&
+//           !song.displayName.contains("AUD-") &&
+//           !(song.title == "tone"))
+//       .toList();
+//   if (deviceSongModels.length != databaseMySongModels.length) {
+//     await handleSongsAdded();
+//     await handleSongsRemoved();
+//     return false;
+//   } else {
+//     return true;
+//   }
+// }

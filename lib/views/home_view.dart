@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:isolate';
 
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ import 'package:watcher/watcher.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
-  static const id = "HomeView";
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -26,10 +26,15 @@ class _HomeViewState extends State<HomeView> {
     await Isolate.spawn(_watchFiles, receivePort.sendPort);
 
     receivePort.listen((message) {
-      if (message == 'file_changed') {
+      log(message);
+      String msgStr = message;
+      if (mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const RefreshSplashView()),
+          MaterialPageRoute(
+              builder: (context) => RefreshSplashView(
+                    msgStr: msgStr,
+                  )),
         );
       }
     });
@@ -49,7 +54,16 @@ class _HomeViewState extends State<HomeView> {
             event.type == ChangeType.MODIFY ||
             event.type == ChangeType.REMOVE) {
           if (isAudioFile(event.path)) {
-            sendPort.send('file_changed');
+            if (event.type == ChangeType.ADD) {
+              log("1");
+              sendPort.send("add");
+            } else if (event.type == ChangeType.MODIFY) {
+              log("2");
+              sendPort.send("modify");
+            } else if (event.type == ChangeType.REMOVE) {
+              log("3");
+              sendPort.send("delete");
+            }
           }
         }
       });

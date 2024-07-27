@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,17 +17,15 @@ class MusicCubit extends Cubit<MusicState> {
   AudioPlayer audioPlayer = AudioPlayer();
   List<MySongModel> myPublicSongModelList = [];
   MusicCubit() : super(MusicInitialState()) {
+    audioPlayer.setLoopMode(LoopMode.all);
     myPublicSongModelList = fetchMySongModels();
   }
 
   Future<void> setupSongModels() async {
-    audioPlayer.setLoopMode(LoopMode.all);
     if (Hive.box(kFlagBox).get(kOpenedBeforeKey) == false) {
-      await Hive.box(kFlagBox).put(kOpenedBeforeKey, true);
-
       var mySongModelbox = Hive.box<MySongModel>(kMySongModelBox);
       await mySongModelbox.clear();
-
+      log("shit");
       List<SongModel> songModelsList = (await OnAudioQuery().querySongs())
           .where((song) =>
               song.isMusic! &&
@@ -72,6 +71,7 @@ class MusicCubit extends Cubit<MusicState> {
       await Hive.box<int>(kLastSongIdPlayedBox)
           .put(kLastSongIdPlayedKey, mySongModels[0].id);
     }
+    await Hive.box(kFlagBox).put(kOpenedBeforeKey, true);
   }
 
   Future<void> setupAudioPlayer(List<MySongModel> mySongModelList) async {
