@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
@@ -86,7 +84,6 @@ class _AddSongsToPlaylistViewState extends State<AddSongsToPlaylistView> {
                               .remove(mySongModelList[index].id);
                         }
                       });
-                      log(mySongModelList[index].id.toString());
                     },
                     child: CheckboxSongItem(
                       mySongModel: mySongModelList[index],
@@ -100,7 +97,6 @@ class _AddSongsToPlaylistViewState extends State<AddSongsToPlaylistView> {
                 alignment: Alignment.bottomCenter,
                 child: CustomeElevatedButton(
                   onPressed: () {
-                    log(toAddSongModelsIdList.toString());
                     BlocProvider.of<AddAndDeletePlaylistSongsCubit>(context)
                         .addSongsToPlayList(
                             playlistModel: widget.myPlaylistModel,

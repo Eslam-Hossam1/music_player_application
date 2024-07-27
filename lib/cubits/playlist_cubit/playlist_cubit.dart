@@ -8,10 +8,12 @@ import 'package:music_player_app/models/my_playlist_model.dart';
 import 'package:music_player_app/models/my_song_model.dart';
 
 class PlaylistCubit extends Cubit<PlaylistStates> {
-  PlaylistCubit() : super(PlaylistInitialState());
+  AudioPlayer audioPlayer = AudioPlayer();
+  PlaylistCubit() : super(PlaylistInitialState()) {
+    audioPlayer.setLoopMode(LoopMode.all);
+  }
   final _playlistBox = Hive.box<MyPlaylistModel>(kMyPlaylistModelBox);
   List<MyPlaylistModel> myPlaylistModelsList = [];
-  AudioPlayer audioPlayer = AudioPlayer();
 
   void fetchPlayLists() {
     emit(PlaylistLoadingState());

@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:music_player_app/cubits/music_cubit/music_cubit.dart';
 import 'package:music_player_app/cubits/playlist_cubit/playlist_cubit.dart';
 import 'package:music_player_app/cubits/playlist_cubit/playlist_state.dart';
 import 'package:music_player_app/helper/add_space.dart';
+import 'package:music_player_app/helper/get_my_song_model_from_id.dart';
 import 'package:music_player_app/models/my_playlist_model.dart';
 import 'package:music_player_app/models/my_song_model.dart';
 import 'package:music_player_app/views/delete_playlists_view.dart';
@@ -33,17 +33,6 @@ class _PlaylistsTabBarViewState extends State<PlaylistsTabBarView>
   void initState() {
     super.initState();
     BlocProvider.of<PlaylistCubit>(context).fetchPlayLists();
-  }
-
-  MySongModel? getMysongModelFromId(int id) {
-    List<MySongModel> songModelList =
-        BlocProvider.of<MusicCubit>(context).myPublicSongModelList;
-    for (var song in songModelList) {
-      if (song.id == id) {
-        return song;
-      }
-    }
-    return null;
   }
 
   @override
@@ -128,51 +117,37 @@ class _PlaylistsTabBarViewState extends State<PlaylistsTabBarView>
                   : SliverList.builder(
                       itemCount: playlistModelsList.length,
                       itemBuilder: (context, index) {
+                        if (playlistModelsList[index]
+                            .mysongModelsIdList
+                            .isNotEmpty) {
+                          songModel = getMySongModelFromId(
+                              playlistModelsList[index].mysongModelsIdList[0]);
+                        } else {
+                          songModel = null;
+                        }
                         return GestureDetector(
-                          onLongPress: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return EditPlaylistDialoag(
-                                    playlistModel: playlistModelsList[index]);
-                              },
-                            );
-                          },
-                          onTap: () {
-                            if (playlistModelsList[index]
-                                .mysongModelsIdList
-                                .isNotEmpty) {
-                              songModel = getMysongModelFromId(
-                                  playlistModelsList[index]
-                                      .mysongModelsIdList[0]);
-                            } else {
-                              songModel = null;
-                            }
-                            Navigator.push(context, MaterialPageRoute(
-                              builder: (context) {
-                                return PlaylistView(
-                                  myPlaylistModel: playlistModelsList[index],
-                                  songModel: songModel,
-                                );
-                              },
-                            ));
-                          },
-                          child: Builder(builder: (context) {
-                            if (playlistModelsList[index]
-                                .mysongModelsIdList
-                                .isNotEmpty) {
-                              songModel = getMysongModelFromId(
-                                  playlistModelsList[index]
-                                      .mysongModelsIdList[0]);
-                            } else {
-                              songModel = null;
-                            }
-                            return PlaylistItem(
+                            onLongPress: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return EditPlaylistDialoag(
+                                      playlistModel: playlistModelsList[index]);
+                                },
+                              );
+                            },
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(
+                                builder: (context) {
+                                  return PlaylistView(
+                                    myPlaylistModel: playlistModelsList[index],
+                                  );
+                                },
+                              ));
+                            },
+                            child: PlaylistItem(
                               myPlaylistModel: playlistModelsList[index],
                               mySongModel: songModel,
-                            );
-                          }),
-                        );
+                            ));
                       },
                     );
             }

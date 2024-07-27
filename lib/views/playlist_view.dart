@@ -13,6 +13,7 @@ import 'package:music_player_app/cubits/playlist_cubit/playlist_cubit.dart';
 import 'package:music_player_app/helper/add_space.dart';
 import 'package:music_player_app/helper/filter_database_playlist.dart';
 import 'package:music_player_app/helper/get_last_song_played_index.dart';
+import 'package:music_player_app/helper/get_my_song_model_from_id.dart';
 import 'package:music_player_app/models/my_playlist_model.dart';
 import 'package:music_player_app/models/my_song_model.dart';
 import 'package:music_player_app/views/music_playing_view.dart';
@@ -23,16 +24,19 @@ import 'package:music_player_app/widgets/playlist_view_shuffle_button.dart';
 import 'package:music_player_app/widgets/song_item.dart';
 
 class PlaylistView extends StatefulWidget {
-  const PlaylistView(
-      {super.key, required this.myPlaylistModel, this.songModel});
+  const PlaylistView({
+    super.key,
+    required this.myPlaylistModel,
+  });
   final MyPlaylistModel myPlaylistModel;
-  final MySongModel? songModel;
 
   @override
   State<PlaylistView> createState() => _PlaylistViewState();
 }
 
 class _PlaylistViewState extends State<PlaylistView> {
+  MySongModel? songModel;
+
   late int currentIndex;
   late List<MySongModel> playlistSongModels;
 
@@ -105,23 +109,34 @@ class _PlaylistViewState extends State<PlaylistView> {
                           padding: EdgeInsets.symmetric(
                               horizontal:
                                   MediaQuery.of(context).size.width * .2),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: widget.songModel == null
-                                ? Image.asset(
-                                    "assets/music_jpeg_4x.jpg",
-                                    fit: BoxFit.cover,
-                                  )
-                                : widget.songModel!.artworkString == null
-                                    ? Image.asset(
-                                        kApplicationIMage,
-                                        fit: BoxFit.cover,
-                                      )
-                                    : Image.memory(
-                                        widget.songModel!.artworkString!,
-                                        fit: BoxFit.cover,
-                                      ),
-                          ),
+                          child: BlocBuilder<AddAndDeletePlaylistSongsCubit,
+                                  AddAndDeletePlaylistSongsState>(
+                              builder: (context, state) {
+                            if (widget.myPlaylistModel.mysongModelsIdList
+                                .isNotEmpty) {
+                              songModel = getMySongModelFromId(
+                                  widget.myPlaylistModel.mysongModelsIdList[0]);
+                            } else {
+                              songModel = null;
+                            }
+                            return ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: songModel == null
+                                  ? Image.asset(
+                                      "assets/music_jpeg_4x.jpg",
+                                      fit: BoxFit.cover,
+                                    )
+                                  : songModel!.artworkString == null
+                                      ? Image.asset(
+                                          kApplicationIMage,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Image.memory(
+                                          songModel!.artworkString!,
+                                          fit: BoxFit.cover,
+                                        ),
+                            );
+                          }),
                         ),
                       ),
                     ),

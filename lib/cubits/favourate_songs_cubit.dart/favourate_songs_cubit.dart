@@ -5,8 +5,11 @@ import 'package:music_player_app/cubits/favourate_songs_cubit.dart/favourate_son
 import 'package:music_player_app/models/my_song_model.dart';
 
 class FavourateSongsCubit extends Cubit<FavourateSongsStates> {
-  FavourateSongsCubit() : super(FavourateSongsInitialState());
   AudioPlayer audioPlayer = AudioPlayer();
+  FavourateSongsCubit() : super(FavourateSongsInitialState()) {
+    audioPlayer.setLoopMode(LoopMode.all);
+  }
+
   void addToFavourates({required MySongModel mySongModel}) {
     mySongModel.isFavourate = true;
     mySongModel.save();
