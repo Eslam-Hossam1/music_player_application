@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:isolate';
 
 import 'package:flutter/material.dart';
