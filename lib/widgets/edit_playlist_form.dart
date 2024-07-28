@@ -55,7 +55,7 @@ class _EditPlaylistFormState extends State<EditPlaylistForm> {
             addHieghtSpace(16),
             CustomeElvatedButtonIcon(
               text: "Edit PlayList",
-              iconData: Icons.add_box,
+              iconData: Icons.edit,
               backgroundColor: Color(0xff30314d),
               internalColor: Colors.white,
               onPresed: () {

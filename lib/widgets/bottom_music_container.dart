@@ -7,7 +7,6 @@ import 'package:music_player_app/helper/add_space.dart';
 import 'package:music_player_app/views/music_playing_view.dart';
 import 'package:music_player_app/widgets/bottom_music_container_play_and_pause_button.dart';
 import 'package:music_player_app/widgets/bottom_music_container_seek_next_button.dart';
-import "dart:ui";
 
 class BottomMusicContainer extends StatelessWidget {
   const BottomMusicContainer({
