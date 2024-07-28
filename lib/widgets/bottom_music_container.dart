@@ -7,6 +7,7 @@ import 'package:music_player_app/helper/add_space.dart';
 import 'package:music_player_app/views/music_playing_view.dart';
 import 'package:music_player_app/widgets/bottom_music_container_play_and_pause_button.dart';
 import 'package:music_player_app/widgets/bottom_music_container_seek_next_button.dart';
+import "dart:ui";
 
 class BottomMusicContainer extends StatelessWidget {
   const BottomMusicContainer({
@@ -115,9 +116,16 @@ class BottomMusicContainer extends StatelessWidget {
           ),
         );
       } else {
-        return SizedBox(
-          height: 0,
-          width: 0,
+        return Container(
+          height: 80,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 6, 6, 6).withOpacity(.7),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(36),
+              topRight: Radius.circular(36),
+            ),
+          ),
         );
       }
     });
