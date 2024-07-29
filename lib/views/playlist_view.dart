@@ -1,18 +1,15 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:music_player_app/constants.dart';
-import 'package:music_player_app/cubits/add_and_delete_playlist_songs_cubit/add_and_delete_playlist_songs_cubit.dart';
-import 'package:music_player_app/cubits/add_and_delete_playlist_songs_cubit/add_and_delete_playlist_songs_states.dart';
+import 'package:music_player_app/cubits/crud_playlist_songs_cubit/crud_playlist_songs_cubit.dart';
+import 'package:music_player_app/cubits/crud_playlist_songs_cubit/crud_playlist_songs_states.dart';
 import 'package:music_player_app/cubits/favourate_songs_cubit.dart/favourate_songs_cubit.dart';
 import 'package:music_player_app/cubits/music_cubit/music_cubit.dart';
 import 'package:music_player_app/cubits/playlist_cubit/playlist_cubit.dart';
 import 'package:music_player_app/helper/add_space.dart';
 import 'package:music_player_app/helper/filter_database_playlist.dart';
-import 'package:music_player_app/helper/get_last_song_played_index.dart';
 import 'package:music_player_app/helper/get_my_song_model_from_id.dart';
 import 'package:music_player_app/models/my_playlist_model.dart';
 import 'package:music_player_app/models/my_song_model.dart';
@@ -45,7 +42,8 @@ class _PlaylistViewState extends State<PlaylistView> {
     super.initState();
     filterDatabaseModelList(widget.myPlaylistModel);
     playlistSongModels = fetchPlaylistSongs();
-    currentIndex = getLastSongPlayedIndex(playlistSongModels);
+    currentIndex = -1;
+    BlocProvider.of<PlaylistCubit>(context).referenceBool.isAudioSetted = false;
   }
 
   List<MySongModel> fetchPlaylistSongs() {
@@ -109,8 +107,8 @@ class _PlaylistViewState extends State<PlaylistView> {
                           padding: EdgeInsets.symmetric(
                               horizontal:
                                   MediaQuery.of(context).size.width * .2),
-                          child: BlocBuilder<AddAndDeletePlaylistSongsCubit,
-                                  AddAndDeletePlaylistSongsState>(
+                          child: BlocBuilder<CrudPlaylistSongsCubit,
+                                  CrudPlaylistSongsState>(
                               builder: (context, state) {
                             if (widget.myPlaylistModel.mysongModelsIdList
                                 .isNotEmpty) {
@@ -153,19 +151,24 @@ class _PlaylistViewState extends State<PlaylistView> {
                                 fontWeight: FontWeight.bold),
                           ),
                           addHieghtSpace(32),
-                          IgnorePointer(
-                            ignoring: widget
-                                .myPlaylistModel.mysongModelsIdList.isEmpty,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                PlaylistViewPlayAllButton(
-                                    playlistSongModels: playlistSongModels),
-                                PlaylistViewShuffelButton(
-                                    playlistSongModels: playlistSongModels),
-                              ],
-                            ),
-                          ),
+                          BlocBuilder<CrudPlaylistSongsCubit,
+                                  CrudPlaylistSongsState>(
+                              builder: (context, state) {
+                            return IgnorePointer(
+                              ignoring: widget
+                                  .myPlaylistModel.mysongModelsIdList.isEmpty,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  PlaylistViewPlayAllButton(
+                                      playlistSongModels: playlistSongModels),
+                                  PlaylistViewShuffelButton(
+                                      playlistSongModels: playlistSongModels),
+                                ],
+                              ),
+                            );
+                          }),
                           addHieghtSpace(12),
                         ],
                       ),
@@ -178,22 +181,19 @@ class _PlaylistViewState extends State<PlaylistView> {
                         thickness: 1,
                       ),
                     ),
-                    BlocBuilder<AddAndDeletePlaylistSongsCubit,
-                            AddAndDeletePlaylistSongsState>(
+                    BlocBuilder<CrudPlaylistSongsCubit, CrudPlaylistSongsState>(
                         builder: (context, state) {
-                      if (state is AddAndDeletePlaylistSongsRefreshState) {
-                        try {
-                          if (state.cubitCurrentIndex <
-                              playlistSongModels.length) {
-                            currentIndex = state.cubitCurrentIndex;
+                      if (state is PlaylistSongsRefreshState) {
+                        if (state.cubitCurrentIndex <
+                            playlistSongModels.length) {
+                          currentIndex = state.cubitCurrentIndex;
 
-                            Hive.box<int>(kLastSongIdPlayedBox).put(
-                                kLastSongIdPlayedKey,
-                                playlistSongModels[currentIndex].id);
-                          }
-                        } on Exception catch (e) {
-                          log(e.toString());
+                          Hive.box<int>(kLastSongIdPlayedBox).put(
+                              kLastSongIdPlayedKey,
+                              playlistSongModels[currentIndex].id);
                         }
+                      } else if (state is PlayListStopCurrentIndex) {
+                        currentIndex = state.cubitCurrentIndex;
                       } else {
                         playlistSongModels = fetchPlaylistSongs();
                       }
@@ -223,16 +223,17 @@ class _PlaylistViewState extends State<PlaylistView> {
                                     child: GestureDetector(
                                       onTap: () {
                                         BlocProvider.of<MusicCubit>(context)
-                                            .audioPlayer
-                                            .stop();
+                                            .stopMainMusicAudio();
                                         BlocProvider.of<FavourateSongsCubit>(
                                                 context)
-                                            .audioPlayer
-                                            .stop();
+                                            .resetFavourateListAndStopAudio();
                                         Navigator.push(context,
                                             MaterialPageRoute(
                                           builder: (context) {
                                             return MusicPlayingView(
+                                                referenceBool: BlocProvider.of<
+                                                        PlaylistCubit>(context)
+                                                    .referenceBool,
                                                 currentIndex: index,
                                                 audioPlayer: BlocProvider.of<
                                                         PlaylistCubit>(context)
@@ -241,13 +242,18 @@ class _PlaylistViewState extends State<PlaylistView> {
                                                     playlistSongModels);
                                           },
                                         ));
-                                        BlocProvider.of<
-                                                    AddAndDeletePlaylistSongsCubit>(
+                                        BlocProvider.of<CrudPlaylistSongsCubit>(
                                                 context)
                                             .listenToSongIndex(
                                                 audioplayer: BlocProvider.of<
                                                         PlaylistCubit>(context)
                                                     .audioPlayer);
+                                        BlocProvider.of<MusicCubit>(context)
+                                            .listenToExternalSongIndex(
+                                                BlocProvider.of<PlaylistCubit>(
+                                                        context)
+                                                    .audioPlayer,
+                                                playlistSongModels);
                                       },
                                       child: SongItem(
                                         mySongModel: playlistSongModels[index],

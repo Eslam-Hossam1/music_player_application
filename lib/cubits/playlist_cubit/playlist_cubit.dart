@@ -5,10 +5,13 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:music_player_app/constants.dart';
 import 'package:music_player_app/cubits/playlist_cubit/playlist_state.dart';
 import 'package:music_player_app/models/my_playlist_model.dart';
+import 'package:music_player_app/models/my_reference_bool.dart';
 import 'package:music_player_app/models/my_song_model.dart';
 
 class PlaylistCubit extends Cubit<PlaylistStates> {
   AudioPlayer audioPlayer = AudioPlayer();
+  MyReferenceBool referenceBool = MyReferenceBool();
+
   PlaylistCubit() : super(PlaylistInitialState()) {
     audioPlayer.setLoopMode(LoopMode.all);
   }
@@ -44,5 +47,10 @@ class PlaylistCubit extends Cubit<PlaylistStates> {
     } on PlayerException {
       audioPlayer.stop();
     }
+  }
+
+  void stopPlaylistAudio() {
+    this.audioPlayer.stop();
+    this.referenceBool.isAudioSetted = false;
   }
 }

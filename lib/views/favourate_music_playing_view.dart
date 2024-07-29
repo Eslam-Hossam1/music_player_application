@@ -67,20 +67,6 @@ class _FavourateMusicPlayingViewState extends State<FavourateMusicPlayingView> {
     await widget.audioPlayer.seek(Duration.zero, index: index);
   }
 
-  void listenToPlayingState() {
-    widget.audioPlayer.playerStateStream.listen((state) {
-      if (state.playing) {
-        if (mounted) {
-          setState(() {});
-        }
-      } else {
-        if (mounted) {
-          setState(() {});
-        }
-      }
-    });
-  }
-
   void listenToSongIndex() {
     widget.audioPlayer.currentIndexStream.listen((event) {
       if (event != null && mounted) {

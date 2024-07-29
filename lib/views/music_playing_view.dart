@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:music_player_app/cubits/bottom_music_container_cubit/bottom_music_container_cubit.dart';
 import 'package:music_player_app/helper/add_space.dart';
+import 'package:music_player_app/helper/seek_audio_to_current_index.dart';
 import 'package:music_player_app/helper/set_audio_source.dart';
+import 'package:music_player_app/models/my_reference_bool.dart';
 import 'package:music_player_app/models/my_song_model.dart';
 import 'package:music_player_app/widgets/DetailsButton.dart';
 import 'package:music_player_app/widgets/custome_play_and_pause_music_button.dart';
@@ -19,11 +21,13 @@ class MusicPlayingView extends StatefulWidget {
     required this.audioPlayer,
     required this.mySongModelsList,
     required this.currentIndex,
+    required this.referenceBool,
   });
 
   final List<MySongModel> mySongModelsList;
   final AudioPlayer audioPlayer;
   final int currentIndex;
+  final MyReferenceBool referenceBool;
 
   @override
   _MusicPlayingViewState createState() => _MusicPlayingViewState();
@@ -36,19 +40,26 @@ class _MusicPlayingViewState extends State<MusicPlayingView> {
   @override
   void initState() {
     super.initState();
-    if (widget.audioPlayer.currentIndex == widget.currentIndex) {
-      currentIndex = widget.currentIndex;
-      listenToSongIndex();
-    } else {
+    if (widget.referenceBool.isAudioSetted) {
+      int audioCurrentIndex = widget.audioPlayer.currentIndex ?? 0;
       currentIndex = widget.currentIndex;
 
+      listenToSongIndex();
+      if (audioCurrentIndex != widget.currentIndex) {
+        seekAudioToCurrenIndex(currentIndex, widget.audioPlayer);
+        widget.audioPlayer.play();
+      }
+    } else {
+      currentIndex = widget.currentIndex;
       setupAudioPlayer(
               audioPlayer: widget.audioPlayer,
               mySongModelList: widget.mySongModelsList)
           .then(
-        (value) async {
-          seekToCurrenIndex(currentIndex);
+        (value) {
+          seekAudioToCurrenIndex(currentIndex, widget.audioPlayer);
+
           widget.audioPlayer.play();
+          widget.referenceBool.isAudioSetted = true;
 
           listenToSongIndex();
           BlocProvider.of<BottomMusicContainerCubit>(context)
@@ -59,24 +70,6 @@ class _MusicPlayingViewState extends State<MusicPlayingView> {
         },
       );
     }
-  }
-
-  Future<void> seekToCurrenIndex(int index) async {
-    await widget.audioPlayer.seek(Duration.zero, index: index);
-  }
-
-  void listenToPlayingState() {
-    widget.audioPlayer.playerStateStream.listen((state) {
-      if (state.playing) {
-        if (mounted) {
-          setState(() {});
-        }
-      } else {
-        if (mounted) {
-          setState(() {});
-        }
-      }
-    });
   }
 
   void listenToSongIndex() {

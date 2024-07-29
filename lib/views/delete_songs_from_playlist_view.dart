@@ -4,7 +4,7 @@ import 'package:music_player_app/models/my_playlist_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:music_player_app/constants.dart';
-import 'package:music_player_app/cubits/add_and_delete_playlist_songs_cubit/add_and_delete_playlist_songs_cubit.dart';
+import 'package:music_player_app/cubits/crud_playlist_songs_cubit/crud_playlist_songs_cubit.dart';
 import 'package:music_player_app/cubits/music_cubit/music_cubit.dart';
 import 'package:music_player_app/cubits/playlist_cubit/playlist_cubit.dart';
 import 'package:music_player_app/models/my_song_model.dart';
@@ -100,7 +100,7 @@ class _DeleteSongsFromPlaylistViewState
                 alignment: Alignment.bottomCenter,
                 child: CustomeElevatedButton(
                   onPressed: () {
-                    BlocProvider.of<AddAndDeletePlaylistSongsCubit>(context)
+                    BlocProvider.of<CrudPlaylistSongsCubit>(context)
                         .deleteSongsFromPlayList(
                             playlistModel: widget.myPlaylistModel,
                             mySongModelIdsList: toDeleteSongModelsIdList);

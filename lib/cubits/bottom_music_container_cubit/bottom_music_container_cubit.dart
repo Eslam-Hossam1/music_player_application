@@ -47,11 +47,15 @@ class BottomMusicContainerCubit extends Cubit<BottomMusicContainerStates> {
   }
 
   void listenToCurrenIndex(AudioPlayer audioPlayer) {
+    int x = 1;
     audioPlayer.currentIndexStream.listen(
       (event) {
-        //   log("hi");
-        this.currentIndex = event!;
-        emit(BottomMusicContainerSuccessStates());
+        if (x > 1) {
+          this.currentIndex = event!;
+          emit(BottomMusicContainerSuccessStates());
+        } else {
+          x++;
+        }
       },
     );
   }

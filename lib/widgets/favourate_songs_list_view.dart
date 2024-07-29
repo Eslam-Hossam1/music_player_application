@@ -1,14 +1,12 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:music_player_app/constants.dart';
+import 'package:music_player_app/cubits/crud_playlist_songs_cubit/crud_playlist_songs_cubit.dart';
 import 'package:music_player_app/cubits/favourate_songs_cubit.dart/favourate_songs_cubit.dart';
 import 'package:music_player_app/cubits/favourate_songs_cubit.dart/favourate_songs_states.dart';
 import 'package:music_player_app/cubits/music_cubit/music_cubit.dart';
 import 'package:music_player_app/cubits/playlist_cubit/playlist_cubit.dart';
-import 'package:music_player_app/helper/get_last_song_played_index.dart';
 import 'package:music_player_app/models/my_song_model.dart';
 import 'package:music_player_app/views/music_playing_view.dart';
 import 'package:music_player_app/widgets/song_item.dart';
@@ -24,14 +22,13 @@ class _FavourateSongsListViewState extends State<FavourateSongsListView>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  dynamic filteredSongsList;
   late List<MySongModel> mySongModelList;
   late int currentIndex;
   @override
   void initState() {
     super.initState();
     mySongModelList = fetchSongs();
-    currentIndex = getLastSongPlayedIndex(mySongModelList);
+    currentIndex = -1;
   }
 
   List<MySongModel> fetchSongs() {
@@ -53,20 +50,17 @@ class _FavourateSongsListViewState extends State<FavourateSongsListView>
     return BlocBuilder<FavourateSongsCubit, FavourateSongsStates>(
         builder: (context, state) {
       if (state is FavourateSongsPlayListChangeCurrentIndex) {
-        try {
-          if (state.cubitCurrentIndex < mySongModelList.length) {
-            currentIndex = state.cubitCurrentIndex;
+        if (state.cubitCurrentIndex < mySongModelList.length) {
+          currentIndex = state.cubitCurrentIndex;
 
-            Hive.box<int>(kLastSongIdPlayedBox)
-                .put(kLastSongIdPlayedKey, mySongModelList[currentIndex].id);
-          }
-        } on Exception catch (e) {
-          log(e.toString());
+          Hive.box<int>(kLastSongIdPlayedBox)
+              .put(kLastSongIdPlayedKey, mySongModelList[currentIndex].id);
         }
+      } else if (state is FavourateSongsPlayListStopCurrentIndex) {
+        currentIndex = state.cubitCurrentIndex;
       } else {
         mySongModelList = fetchSongs();
       }
-
       return mySongModelList.isEmpty
           ? Center(
               child: Text("There is no favourate Song,  Add one"),
@@ -82,12 +76,16 @@ class _FavourateSongsListViewState extends State<FavourateSongsListView>
                       Navigator.push(context, MaterialPageRoute(
                         builder: (context) {
                           BlocProvider.of<MusicCubit>(context)
-                              .audioPlayer
-                              .stop();
+                              .stopMainMusicAudio();
+
                           BlocProvider.of<PlaylistCubit>(context)
-                              .audioPlayer
-                              .stop();
+                              .stopPlaylistAudio();
+                          BlocProvider.of<CrudPlaylistSongsCubit>(context)
+                              .resetPlayListUi();
                           return MusicPlayingView(
+                              referenceBool:
+                                  BlocProvider.of<FavourateSongsCubit>(context)
+                                      .referenceBool,
                               currentIndex: index,
                               audioPlayer:
                                   BlocProvider.of<FavourateSongsCubit>(context)
@@ -100,6 +98,11 @@ class _FavourateSongsListViewState extends State<FavourateSongsListView>
                               audioplayer:
                                   BlocProvider.of<FavourateSongsCubit>(context)
                                       .audioPlayer);
+                      BlocProvider.of<MusicCubit>(context)
+                          .listenToExternalSongIndex(
+                              BlocProvider.of<FavourateSongsCubit>(context)
+                                  .audioPlayer,
+                              mySongModelList);
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(

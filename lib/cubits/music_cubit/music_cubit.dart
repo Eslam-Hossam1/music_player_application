@@ -6,6 +6,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:music_player_app/constants.dart';
 import 'package:music_player_app/cubits/music_cubit/music_cubit_states.dart';
+import 'package:music_player_app/models/my_reference_bool.dart';
 import 'package:music_player_app/models/my_song_model.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:palette_generator/palette_generator.dart';
@@ -14,6 +15,7 @@ import 'package:path_provider/path_provider.dart';
 class MusicCubit extends Cubit<MusicState> {
   OnAudioQuery onAudioQuery = OnAudioQuery();
   AudioPlayer audioPlayer = AudioPlayer();
+  MyReferenceBool referenceBool = MyReferenceBool();
   List<MySongModel> myPublicSongModelList = [];
   MusicCubit() : super(MusicInitialState()) {
     audioPlayer.setLoopMode(LoopMode.all);
@@ -100,5 +102,38 @@ class MusicCubit extends Cubit<MusicState> {
       (a, b) => b.dateAdded!.compareTo(a.dateAdded!),
     );
     return mySongModelList;
+  }
+
+  void listenToSongIndex({required AudioPlayer audioplayer}) {
+    int x = 1;
+    audioplayer.currentIndexStream.listen(
+      (event) {
+        if (x > 1) {
+          emit(MusicInternalChangeCurrentIndexState(
+              cubitCurrentIndex: event ?? 0));
+        } else {
+          x++;
+        }
+      },
+    );
+  }
+
+  void listenToExternalSongIndex(
+      AudioPlayer audioPlayer, List<MySongModel> songModelList) {
+    audioPlayer.currentIndexStream.listen((event) {
+      if (event != null) {
+        int externalId = songModelList[event].id;
+        for (int i = 0; i < myPublicSongModelList.length; i++) {
+          if (myPublicSongModelList[i].id == externalId) {
+            emit(MusicExternalChangeCurrentIndexState(toBeCurrentIndex: i));
+          }
+        }
+      }
+    });
+  }
+
+  void stopMainMusicAudio() {
+    this.audioPlayer.stop();
+    this.referenceBool.isAudioSetted = false;
   }
 }

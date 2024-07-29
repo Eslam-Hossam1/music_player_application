@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player_app/cubits/crud_playlist_songs_cubit/crud_playlist_songs_cubit.dart';
 import 'package:music_player_app/cubits/favourate_songs_cubit.dart/favourate_songs_cubit.dart';
 import 'package:music_player_app/cubits/music_cubit/music_cubit.dart';
 import 'package:music_player_app/cubits/playlist_cubit/playlist_cubit.dart';
@@ -96,14 +97,17 @@ class _SearchViewState extends State<SearchView> {
                                 await Future.delayed(
                                     Duration(milliseconds: 300));
                                 BlocProvider.of<FavourateSongsCubit>(context)
-                                    .audioPlayer
-                                    .stop();
+                                    .resetFavourateListAndStopAudio();
                                 BlocProvider.of<PlaylistCubit>(context)
-                                    .audioPlayer
-                                    .stop();
+                                    .stopPlaylistAudio();
+                                BlocProvider.of<CrudPlaylistSongsCubit>(context)
+                                    .resetPlayListUi();
                                 Navigator.push(context, MaterialPageRoute(
                                   builder: (context) {
                                     return MusicPlayingView(
+                                      referenceBool:
+                                          BlocProvider.of<MusicCubit>(context)
+                                              .referenceBool,
                                       currentIndex: getIndex(
                                           songModelsList[index].id,
                                           BlocProvider.of<MusicCubit>(context)

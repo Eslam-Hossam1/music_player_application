@@ -4,6 +4,7 @@ import 'package:music_player_app/constants.dart';
 import 'package:music_player_app/cubits/bottom_music_container_cubit/bottom_music_container_cubit.dart';
 import 'package:music_player_app/cubits/bottom_music_container_cubit/bottom_music_container_states.dart';
 import 'package:music_player_app/helper/add_space.dart';
+import 'package:music_player_app/models/my_reference_bool.dart';
 import 'package:music_player_app/views/music_playing_view.dart';
 import 'package:music_player_app/widgets/bottom_music_container_play_and_pause_button.dart';
 import 'package:music_player_app/widgets/bottom_music_container_seek_next_button.dart';
@@ -40,6 +41,7 @@ class BottomMusicContainer extends StatelessWidget {
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) {
                     return MusicPlayingView(
+                        referenceBool: MyReferenceBool(isAudioSetted: true),
                         audioPlayer:
                             BlocProvider.of<BottomMusicContainerCubit>(context)
                                 .audioPlayer!,

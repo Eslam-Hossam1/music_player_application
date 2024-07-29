@@ -5,7 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:music_player_app/constants.dart';
 import 'package:music_player_app/cubits/add_and_delete_playlist_cubit/add_and_delete_playlist_cubit.dart';
-import 'package:music_player_app/cubits/add_and_delete_playlist_songs_cubit/add_and_delete_playlist_songs_cubit.dart';
+import 'package:music_player_app/cubits/crud_playlist_songs_cubit/crud_playlist_songs_cubit.dart';
 import 'package:music_player_app/cubits/bottom_music_container_cubit/bottom_music_container_cubit.dart';
 import 'package:music_player_app/cubits/favourate_songs_cubit.dart/favourate_songs_cubit.dart';
 import 'package:music_player_app/cubits/music_cubit/music_cubit.dart';
@@ -74,7 +74,7 @@ class _MusicAppState extends State<MusicApp> {
           create: (context) => FavourateSongsCubit(),
         ),
         BlocProvider(create: (context) => PlaylistCubit()),
-        BlocProvider(create: (context) => AddAndDeletePlaylistSongsCubit()),
+        BlocProvider(create: (context) => CrudPlaylistSongsCubit()),
         BlocProvider(create: (context) => AddAndDeletePlaylistCubit()),
         BlocProvider(create: (context) => BottomMusicContainerCubit())
       ],
