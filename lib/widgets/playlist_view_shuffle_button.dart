@@ -26,8 +26,12 @@ class PlaylistViewShuffelButton extends StatelessWidget {
       onPresed: () {
         if (playlistSongModels.isEmpty) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              duration: Duration(seconds: 1),
-              content: Text("you don't have songs in the playlist")));
+              backgroundColor: Colors.grey.shade900,
+              duration: Duration(milliseconds: 1500),
+              content: Text(
+                "you don't have songs in the playlist",
+                style: TextStyle(color: Colors.white),
+              )));
         } else {
           BlocProvider.of<MusicCubit>(context).stopMainMusicAudio();
           BlocProvider.of<FavourateSongsCubit>(context)

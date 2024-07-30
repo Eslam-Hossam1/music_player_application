@@ -25,8 +25,12 @@ class CustomePopupMenuButton extends StatelessWidget {
             onTap: () {
               if (widget.myPlaylistModel.mysongModelsIdList.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    duration: Duration(seconds: 1),
-                    content: Text("you don't have songs in your device")));
+                    backgroundColor: Colors.grey.shade900,
+                    duration: Duration(milliseconds: 1500),
+                    content: Text(
+                      "you don't have songs in your device",
+                      style: TextStyle(color: Colors.white),
+                    )));
               } else {
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) {
@@ -49,8 +53,12 @@ class CustomePopupMenuButton extends StatelessWidget {
               onTap: () {
                 if (widget.myPlaylistModel.mysongModelsIdList.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      duration: Duration(seconds: 1),
-                      content: Text("you don't have songs in the playlist")));
+                      backgroundColor: Colors.grey.shade900,
+                      duration: Duration(milliseconds: 1500),
+                      content: Text(
+                        "you don't have songs in the playlist",
+                        style: TextStyle(color: Colors.white),
+                      )));
                 } else {
                   Navigator.push(
                     context,
