@@ -25,7 +25,7 @@ class PlaylistViewPlayAllButton extends StatelessWidget {
               backgroundColor: Colors.grey.shade900,
               duration: Duration(milliseconds: 1500),
               content: Text(
-                "you don't have songs in the plaulist",
+                "you don't have songs in the playlist",
                 style: TextStyle(color: Colors.white),
               )));
         } else {
