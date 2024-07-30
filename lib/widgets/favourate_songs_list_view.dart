@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
@@ -26,6 +28,8 @@ class _FavourateSongsListViewState extends State<FavourateSongsListView>
   late int currentIndex;
   @override
   void initState() {
+    log("init 2");
+
     super.initState();
     mySongModelList = fetchSongs();
     currentIndex = -1;

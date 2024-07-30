@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:music_player_app/cubits/bottom_music_container_cubit/bottom_music_container_states.dart';
@@ -10,6 +13,8 @@ class BottomMusicContainerCubit extends Cubit<BottomMusicContainerStates> {
   AudioPlayer? audioPlayer;
   List<MySongModel>? songModelList;
   bool? isPlaying;
+  StreamSubscription? playingStateStream;
+  StreamSubscription? listenToIndexStream;
   void inializeBottomMusicContainer(
       {required int currentIndex,
       required AudioPlayer audioPlayer,
@@ -18,6 +23,12 @@ class BottomMusicContainerCubit extends Cubit<BottomMusicContainerStates> {
     this.audioPlayer = audioPlayer;
     this.songModelList = songModelList;
     this.isPlaying = audioPlayer.playing;
+    if (playingStateStream != null) {
+      playingStateStream!.cancel();
+    }
+    if (listenToIndexStream != null) {
+      listenToIndexStream!.cancel();
+    }
     listenToCurrenIndex(this.audioPlayer!);
     listToPlayingState(this.audioPlayer!);
   }
@@ -30,7 +41,7 @@ class BottomMusicContainerCubit extends Cubit<BottomMusicContainerStates> {
   }
 
   void listToPlayingState(AudioPlayer audioPlayer) {
-    audioPlayer.playingStream.listen(
+    this.playingStateStream = audioPlayer.playingStream.listen(
       (event) {
         this.isPlaying = event;
         emit(BottomMusicContainerSuccessStates());
@@ -48,7 +59,7 @@ class BottomMusicContainerCubit extends Cubit<BottomMusicContainerStates> {
 
   void listenToCurrenIndex(AudioPlayer audioPlayer) {
     int x = 1;
-    audioPlayer.currentIndexStream.listen(
+    this.listenToIndexStream = audioPlayer.currentIndexStream.listen(
       (event) {
         if (x > 1) {
           this.currentIndex = event!;
