@@ -8,7 +8,7 @@ import 'package:music_player_app/cubits/crud_playlist_songs_cubit/crud_playlist_
 import 'package:music_player_app/cubits/music_cubit/music_cubit.dart';
 import 'package:music_player_app/cubits/playlist_cubit/playlist_cubit.dart';
 import 'package:music_player_app/models/my_song_model.dart';
-import 'package:music_player_app/views/checkbox_song_item.dart';
+import 'package:music_player_app/widgets/checkbox_song_item.dart';
 import 'package:music_player_app/widgets/custome_elevated_button.dart';
 
 class DeleteSongsFromPlaylistView extends StatefulWidget {
