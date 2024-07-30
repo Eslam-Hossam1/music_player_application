@@ -23,13 +23,19 @@ class CustomePopupMenuButton extends StatelessWidget {
               children: [Text("Add Songs"), Icon(Icons.add_box_outlined)],
             ),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return AddSongsToPlaylistView(
-                    myPlaylistModel: widget.myPlaylistModel,
-                  );
-                },
-              ));
+              if (widget.myPlaylistModel.mysongModelsIdList.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    duration: Duration(seconds: 1),
+                    content: Text("you don't have songs in your device")));
+              } else {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) {
+                    return AddSongsToPlaylistView(
+                      myPlaylistModel: widget.myPlaylistModel,
+                    );
+                  },
+                ));
+              }
             },
           ),
           PopupMenuItem(
@@ -41,16 +47,22 @@ class CustomePopupMenuButton extends StatelessWidget {
                 ],
               ),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return DeleteSongsFromPlaylistView(
-                        myPlaylistModel: widget.myPlaylistModel,
-                      );
-                    },
-                  ),
-                );
+                if (widget.myPlaylistModel.mysongModelsIdList.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      duration: Duration(seconds: 1),
+                      content: Text("you don't have songs in the playlist")));
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return DeleteSongsFromPlaylistView(
+                          myPlaylistModel: widget.myPlaylistModel,
+                        );
+                      },
+                    ),
+                  );
+                }
               })
         ];
       },

@@ -21,101 +21,121 @@ class BottomMusicContainer extends StatelessWidget {
       if (state is BottomMusicContainerSuccessStates) {
         var bottomMusicCubit =
             BlocProvider.of<BottomMusicContainerCubit>(context);
-        return Container(
-          height: 80,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            color: Color(bottomMusicCubit
-                .songModelList![bottomMusicCubit.currentIndex!]
-                .primaryPaletteColor
-                .colorValue),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(36),
-              topRight: Radius.circular(36),
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.only(right: 16, left: 12),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) {
-                    return MusicPlayingView(
-                        referenceBool: MyReferenceBool(isAudioSetted: true),
-                        audioPlayer:
-                            BlocProvider.of<BottomMusicContainerCubit>(context)
-                                .audioPlayer!,
-                        mySongModelsList:
-                            BlocProvider.of<BottomMusicContainerCubit>(context)
-                                .songModelList!,
-                        currentIndex:
-                            BlocProvider.of<BottomMusicContainerCubit>(context)
-                                .currentIndex!);
-                  },
-                ));
-              },
-              child: Row(
-                children: [
-                  addWidthSpace(8),
-                  SizedBox(
-                    height: 60,
-                    width: 60,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Hero(
-                        tag: "lol",
-                        child: bottomMusicCubit
-                                    .songModelList![
-                                        bottomMusicCubit.currentIndex!]
-                                    .artworkString ==
-                                null
-                            ? Image.asset(
-                                kApplicationIMage,
-                                fit: BoxFit.cover,
-                              )
-                            : Image.memory(
-                                bottomMusicCubit
-                                    .songModelList![
-                                        bottomMusicCubit.currentIndex!]
-                                    .artworkString!,
-                                fit: BoxFit.cover,
-                              ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: ListTile(
-                      title: Text(
-                          overflow: TextOverflow.ellipsis,
-                          bottomMusicCubit
-                              .songModelList![bottomMusicCubit.currentIndex!]
-                              .title),
-                      subtitle: Text(
-                          overflow: TextOverflow.ellipsis,
-                          bottomMusicCubit
-                                      .songModelList![
-                                          bottomMusicCubit.currentIndex!]
-                                      .artist ==
-                                  "<unknown>"
-                              ? bottomMusicCubit
-                                  .songModelList![
-                                      bottomMusicCubit.currentIndex!]
-                                  .title
-                              : bottomMusicCubit
-                                  .songModelList![
-                                      bottomMusicCubit.currentIndex!]
-                                  .artist!),
-                    ),
-                  ),
-                  BottomMusicContainerPlayAndPauseButton(),
-                  addWidthSpace(12),
-                  BottomMusicContainerSeekNextButton(),
-                  addWidthSpace(12)
-                ],
+        if (bottomMusicCubit.songModelList!.isNotEmpty) {
+          return Container(
+            height: 80,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: Color(bottomMusicCubit
+                  .songModelList![bottomMusicCubit.currentIndex!]
+                  .primaryPaletteColor
+                  .colorValue),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(36),
+                topRight: Radius.circular(36),
               ),
             ),
-          ),
-        );
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16, left: 12),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return MusicPlayingView(
+                          referenceBool: MyReferenceBool(isAudioSetted: true),
+                          audioPlayer:
+                              BlocProvider.of<BottomMusicContainerCubit>(
+                                      context)
+                                  .audioPlayer!,
+                          mySongModelsList:
+                              BlocProvider.of<BottomMusicContainerCubit>(
+                                      context)
+                                  .songModelList!,
+                          currentIndex:
+                              BlocProvider.of<BottomMusicContainerCubit>(
+                                      context)
+                                  .currentIndex!);
+                    },
+                  ));
+                },
+                child: Row(
+                  children: [
+                    addWidthSpace(8),
+                    SizedBox(
+                      height: 60,
+                      width: 60,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Hero(
+                          tag: "lol",
+                          child: bottomMusicCubit
+                                      .songModelList![
+                                          bottomMusicCubit.currentIndex!]
+                                      .artworkString ==
+                                  null
+                              ? Image.asset(
+                                  kApplicationIMage,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.memory(
+                                  bottomMusicCubit
+                                      .songModelList![
+                                          bottomMusicCubit.currentIndex!]
+                                      .artworkString!,
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: ListTile(
+                        title: Text(
+                            overflow: TextOverflow.ellipsis,
+                            bottomMusicCubit
+                                .songModelList![bottomMusicCubit.currentIndex!]
+                                .title),
+                        subtitle: Text(
+                            overflow: TextOverflow.ellipsis,
+                            bottomMusicCubit
+                                        .songModelList![
+                                            bottomMusicCubit.currentIndex!]
+                                        .artist ==
+                                    "<unknown>"
+                                ? bottomMusicCubit
+                                    .songModelList![
+                                        bottomMusicCubit.currentIndex!]
+                                    .title
+                                : bottomMusicCubit
+                                    .songModelList![
+                                        bottomMusicCubit.currentIndex!]
+                                    .artist!),
+                      ),
+                    ),
+                    BottomMusicContainerPlayAndPauseButton(),
+                    addWidthSpace(12),
+                    BottomMusicContainerSeekNextButton(),
+                    addWidthSpace(12)
+                  ],
+                ),
+              ),
+            ),
+          );
+        } else {
+          return Container(
+            height: 80,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: Color.fromARGB(255, 6, 6, 6).withOpacity(.7),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(36),
+                topRight: Radius.circular(36),
+              ),
+            ),
+            child: Center(
+              child: Text("Sorry No Song Exist"),
+            ),
+          );
+        }
       } else {
         return Container(
           height: 80,

@@ -154,19 +154,14 @@ class _PlaylistViewState extends State<PlaylistView> {
                           BlocBuilder<CrudPlaylistSongsCubit,
                                   CrudPlaylistSongsState>(
                               builder: (context, state) {
-                            return IgnorePointer(
-                              ignoring: widget
-                                  .myPlaylistModel.mysongModelsIdList.isEmpty,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  PlaylistViewPlayAllButton(
-                                      playlistSongModels: playlistSongModels),
-                                  PlaylistViewShuffelButton(
-                                      playlistSongModels: playlistSongModels),
-                                ],
-                              ),
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                PlaylistViewPlayAllButton(
+                                    playlistSongModels: playlistSongModels),
+                                PlaylistViewShuffelButton(
+                                    playlistSongModels: playlistSongModels),
+                              ],
                             );
                           }),
                           addHieghtSpace(12),

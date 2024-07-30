@@ -20,30 +20,36 @@ class PlaylistViewPlayAllButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomeElvatedButtonIcon(
       onPresed: () {
-        BlocProvider.of<MusicCubit>(context).stopMainMusicAudio();
-        BlocProvider.of<FavourateSongsCubit>(context)
-            .resetFavourateListAndStopAudio();
-        BlocProvider.of<PlaylistCubit>(context).stopPlaylistAudio();
-        BlocProvider.of<PlaylistCubit>(context)
-            .audioPlayer
-            .setShuffleModeEnabled(false);
+        if (playlistSongModels.isEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              duration: Duration(seconds: 1),
+              content: Text("you don't have songs in the plaulist")));
+        } else {
+          BlocProvider.of<MusicCubit>(context).stopMainMusicAudio();
+          BlocProvider.of<FavourateSongsCubit>(context)
+              .resetFavourateListAndStopAudio();
+          BlocProvider.of<PlaylistCubit>(context).stopPlaylistAudio();
+          BlocProvider.of<PlaylistCubit>(context)
+              .audioPlayer
+              .setShuffleModeEnabled(false);
 
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context) {
-            return MusicPlayingView(
-                referenceBool:
-                    BlocProvider.of<PlaylistCubit>(context).referenceBool,
-                audioPlayer:
-                    BlocProvider.of<PlaylistCubit>(context).audioPlayer,
-                mySongModelsList: playlistSongModels,
-                currentIndex: 0);
-          },
-        ));
-        BlocProvider.of<CrudPlaylistSongsCubit>(context).listenToSongIndex(
-            audioplayer: BlocProvider.of<PlaylistCubit>(context).audioPlayer);
-        BlocProvider.of<MusicCubit>(context).listenToExternalSongIndex(
-            BlocProvider.of<PlaylistCubit>(context).audioPlayer,
-            playlistSongModels);
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context) {
+              return MusicPlayingView(
+                  referenceBool:
+                      BlocProvider.of<PlaylistCubit>(context).referenceBool,
+                  audioPlayer:
+                      BlocProvider.of<PlaylistCubit>(context).audioPlayer,
+                  mySongModelsList: playlistSongModels,
+                  currentIndex: 0);
+            },
+          ));
+          BlocProvider.of<CrudPlaylistSongsCubit>(context).listenToSongIndex(
+              audioplayer: BlocProvider.of<PlaylistCubit>(context).audioPlayer);
+          BlocProvider.of<MusicCubit>(context).listenToExternalSongIndex(
+              BlocProvider.of<PlaylistCubit>(context).audioPlayer,
+              playlistSongModels);
+        }
       },
       backgroundColor: Colors.white,
       internalColor: const Color(0xff30314d),
