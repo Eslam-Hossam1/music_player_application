@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player_app/cubits/music_cubit/music_cubit.dart';
 import 'package:music_player_app/views/add_songs_to_playlist_view.dart';
 import 'package:music_player_app/views/delete_songs_from_playlist_view.dart';
 import 'package:music_player_app/views/playlist_view.dart';
@@ -23,7 +25,9 @@ class CustomePopupMenuButton extends StatelessWidget {
               children: [Text("Add Songs"), Icon(Icons.add_box_outlined)],
             ),
             onTap: () {
-              if (widget.myPlaylistModel.mysongModelsIdList.isEmpty) {
+              if (BlocProvider.of<MusicCubit>(context)
+                  .myPublicSongModelList
+                  .isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     backgroundColor: Colors.grey.shade900,
                     duration: Duration(milliseconds: 1500),
