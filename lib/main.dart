@@ -11,19 +11,13 @@ import 'package:music_player_app/cubits/favourate_songs_cubit.dart/favourate_son
 import 'package:music_player_app/cubits/music_cubit/music_cubit.dart';
 import 'package:music_player_app/cubits/playlist_cubit/playlist_cubit.dart';
 import 'package:music_player_app/helper/check_device_crud_files.dart';
+import 'package:music_player_app/helper/request_permissions.dart';
 import 'package:music_player_app/models/my_playlist_model.dart';
 import 'package:music_player_app/models/my_song_model.dart';
 
 import 'package:music_player_app/views/splash_view.dart';
 
 import 'package:permission_handler/permission_handler.dart';
-
-Future<void> requestPermissions() async {
-  await [
-    Permission.storage,
-    Permission.manageExternalStorage,
-  ].request();
-}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
