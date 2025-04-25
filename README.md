@@ -1,16 +1,46 @@
-# music_player_app
+# 🎵 Flutter Music Player App
 
-A new Flutter project.
+A clean and functional **music player** built with **Flutter**, offering seamless audio playback, playlist management, and local data storage — all wrapped in a polished UI designed for mobile use.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## ✨ Features
 
-A few resources to get you started if this is your first Flutter project:
+### 🎧 Audio Playback
+- Play, pause, skip, and seek within tracks
+- Background playback support for uninterrupted listening
+- Displays current playback status and timing
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### 📂 Playlist Management (CRUD)
+- Create, edit, and delete custom playlists
+- Add or remove songs from playlists
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### ❤️ Favorite Songs
+- Mark tracks as favorites for quick access
+- Favorites are saved locally and persist across sessions
+
+### 💾 Local Storage
+- Data persistence powered by **Hive**
+- User preferences and playlist data stored securely on-device
+
+### 🧠 State Management
+- Built using **Bloc** for scalable and predictable state handling
+
+---
+
+## 🛠️ Tech Stack
+
+- **Flutter** & **Dart**
+- `just_audio` – For audio playback
+- `just_audio_background` – For background playback support
+- `hive` – For local data storage
+- `flutter_bloc` – State management
+  
+---
+
+## 🚀 Getting Started
+
+1. **Clone the repo**
+   ```bash
+   git clone https://github.com/your-username/flutter-music-player.git
+   cd flutter-music-player
