@@ -42,5 +42,5 @@ A clean and functional **music player** built with **Flutter**, offering seamles
 
 1. **Clone the repo**
    ```bash
-   git clone https://github.com/your-username/flutter-music-player.git
-   cd flutter-music-player
+   git clone https://github.com/Eslam-Hossam1/music_player_application
+   cd music_player_application
